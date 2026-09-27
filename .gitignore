@@ -1,0 +1,54 @@
+# --- Terraform ---
+# Provider plugins and module cache (this is the big one — gigabytes fast)
+**/.terraform/
+**/.terraform.lock.hcl
+**/terraform.tfstate
+**/terraform.tfstate.*
+**/*.tfstate
+**/*.tfstate.backup
+**/*.tfplan
+**/crash.log
+**/crash.*.log
+**/.terraformrc
+**/terraform.rc
+# Local variable files — never commit values, keep *.tfvars.example
+**/*.tfvars
+**/*.tfvars.json
+!**/*.tfvars.example
+# Override files are local-only by convention
+**/override.tf
+**/override.tf.json
+**/*_override.tf
+**/*_override.tf.json
+# Host-side plugin cache if TF_PLUGIN_CACHE_DIR points into the repo
+.terraform.d/
+.terraform-plugin-cache/
+
+# --- Generated output ---
+out/
+
+# --- Container scratch ---
+docker/.cache/
+*.tar
+*.tar.gz
+
+# --- Pester / build ---
+TestResults/
+testResults.xml
+coverage.xml
+*.trx
+
+# --- PowerShell / editor ---
+*.log
+.vscode/
+!.vscode/settings.json
+!.vscode/extensions.json
+*.code-workspace
+.idea/
+*.swp
+*~
+
+# --- OS ---
+Thumbs.db
+Desktop.ini
+.DS_Store
