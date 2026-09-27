@@ -1,0 +1,70 @@
+        <aside id="sidebar">
+            <div class="section">
+                <h2>Order</h2>
+                <div class="radio-row">
+                    <label><input type="radio" name="flow" value="foundation"> Foundation <span class="hint">(vertical, most depended-upon at the bottom)</span></label>
+                    <label><input type="radio" name="flow" value="testorder"> Test order <span class="hint">(dependencies first)</span></label>
+                    <label><input type="radio" name="flow" value="callflow"> Call flow <span class="hint">(callers first)</span></label>
+                </div>
+            </div>
+            <div class="section">
+                <h2>Test order</h2>
+                <p class="hint" id="order-intro"></p>
+                <div id="order-list"></div>
+                <div id="order-cycle" class="order-cycle" hidden></div>
+            </div>
+            <div class="section">
+                <h2 id="colorby-heading"></h2>
+                <div class="radio-row" id="colorby-options"></div>
+                <!-- What the colour MEANS, beside the control that chooses it.
+                     The legend at the foot of this sidebar says the same thing
+                     and is eight blocks below the fold. -->
+                <p class="hint" id="colorby-encoding"></p>
+            </div>
+            <div class="section">
+                <h2>Search</h2>
+                <input type="search" id="search" placeholder="Filter by name" autocomplete="off">
+            </div>
+            <div class="section">
+                <h2>Kinds</h2>
+                <div id="kind-filters"></div>
+            </div>
+            <div class="section">
+                <h2>Filters</h2>
+                <label class="check"><input type="checkbox" id="exported-only"> Exported only</label>
+                <div id="unresolved-wrap" hidden>
+                    <label class="check"><input type="checkbox" id="show-unresolved"> Show unresolved</label>
+                </div>
+            </div>
+            <div class="section" id="focus-section">
+                <h2>Focus</h2>
+                <p class="hint" id="focus-hint">Select a node to focus its neighbourhood.</p>
+                <div id="focus-controls" hidden>
+                    <label for="depth">Depth: <b id="depth-val">2</b></label>
+                    <input type="range" id="depth" min="1" max="5" step="1" value="2">
+                    <div class="radio-row">
+                        <label><input type="radio" name="dir" value="dependents" checked> Dependents <span class="hint">(what breaks)</span></label>
+                        <label><input type="radio" name="dir" value="dependencies"> Dependencies <span class="hint">(what it needs)</span></label>
+                        <label><input type="radio" name="dir" value="both"> Both</label>
+                    </div>
+                </div>
+            </div>
+            <div class="section">
+                <h2>View</h2>
+                <!-- Config/settings.psd1 in this template set is the source of truth for
+                     value, range, and step; the attributes below are
+                     placeholders the script overwrites at init. -->
+                <label for="zoom-speed">Zoom speed: <b id="zoom-speed-val">1.25x</b></label>
+                <input type="range" id="zoom-speed" min="0.25" max="5" step="0.25" value="1.25">
+                <p class="hint">Mouse wheel zoom sensitivity.</p>
+            </div>
+            <div class="section btn-row">
+                <button type="button" id="clear-focus">Clear focus</button>
+                <button type="button" id="fit">Fit</button>
+            </div>
+            <div class="section">
+                <h2>Legend</h2>
+                <div class="legend" id="legend"></div>
+            </div>
+<!--__SLOT_DETAILS__-->
+        </aside>

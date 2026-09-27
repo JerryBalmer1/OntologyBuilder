@@ -1,0 +1,183 @@
+/* Scrollbars ---------------------------------------------------------- */
+/* The platform default here is a ~5px overlay bar that fades out - close to
+   un-grabbable with a mouse. Every scrollable pane gets a wide, always-visible
+   thumb instead. Panes are listed explicitly rather than styled globally so the
+   Cytoscape canvas, which must never scroll, cannot pick this up.
+   scrollbar-gutter reserves the track so content does not shift when the thumb
+   appears or disappears. */
+#sidebar,
+#order-list,
+#template-notice,
+.fatal {
+    scrollbar-gutter: stable;
+}
+#sidebar::-webkit-scrollbar,
+#order-list::-webkit-scrollbar,
+#template-notice::-webkit-scrollbar,
+.fatal::-webkit-scrollbar { width: 14px; height: 14px; }
+
+#sidebar::-webkit-scrollbar-track,
+#order-list::-webkit-scrollbar-track,
+#template-notice::-webkit-scrollbar-track,
+.fatal::-webkit-scrollbar-track { background: var(--scroll-track); }
+
+#sidebar::-webkit-scrollbar-thumb,
+#order-list::-webkit-scrollbar-thumb,
+#template-notice::-webkit-scrollbar-thumb,
+.fatal::-webkit-scrollbar-thumb {
+    background: var(--scroll-thumb);
+    /* Border of the track colour insets the thumb without shrinking the
+       draggable hit area, which stays the full 14px. */
+    border: 3px solid var(--scroll-track);
+    border-radius: 7px;
+    /* A long list otherwise produces a thumb a few pixels tall. */
+    min-height: 44px;
+}
+#sidebar::-webkit-scrollbar-thumb:hover,
+#order-list::-webkit-scrollbar-thumb:hover,
+#template-notice::-webkit-scrollbar-thumb:hover,
+.fatal::-webkit-scrollbar-thumb:hover { background: var(--scroll-thumb-hover); }
+
+#sidebar::-webkit-scrollbar-thumb:active,
+#order-list::-webkit-scrollbar-thumb:active,
+#template-notice::-webkit-scrollbar-thumb:active,
+.fatal::-webkit-scrollbar-thumb:active { background: var(--accent); }
+
+/* Firefox has no ::-webkit-scrollbar. Its standard properties are scoped to
+   engines that lack the pseudo-element, because in Chrome 121+ setting
+   scrollbar-color silently disables every ::-webkit-scrollbar rule above. */
+@supports not selector(::-webkit-scrollbar) {
+    #sidebar,
+    #order-list,
+    #template-notice,
+    .fatal {
+        scrollbar-width: auto;
+        scrollbar-color: var(--scroll-thumb) var(--scroll-track);
+    }
+}
+
+.section { margin-bottom: 18px; }
+.section > h2 {
+    margin: 0 0 8px;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: .08em;
+    color: var(--fg-dim);
+    font-weight: 600;
+}
+
+input[type="search"], input[type="text"] {
+    width: 100%;
+    padding: 6px 8px;
+    background: var(--panel-2);
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    color: var(--fg);
+    font: inherit;
+}
+input[type="search"]:focus, button:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
+
+label.check { display: flex; align-items: center; gap: 7px; padding: 3px 0; cursor: pointer; }
+label.check .swatch { width: 10px; height: 10px; border-radius: 2px; flex: 0 0 auto; }
+label.check .count { margin-left: auto; color: var(--fg-dim); font-size: 11px; }
+
+button {
+    padding: 6px 10px;
+    background: var(--panel-2);
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    color: var(--fg);
+    font: inherit;
+    cursor: pointer;
+}
+button:hover { background: #2b3340; }
+.btn-row { display: flex; gap: 8px; }
+.btn-row button { flex: 1; }
+
+input[type="range"] { width: 100%; }
+.radio-row { display: flex; flex-direction: column; gap: 2px; }
+.radio-row label { display: flex; align-items: baseline; gap: 7px; cursor: pointer; }
+.hint { color: var(--fg-dim); font-size: 11px; margin: 2px 0 0; }
+
+/* Test order ---------------------------------------------------------- */
+#order-list { max-height: 250px; overflow-y: auto; user-select: all; }
+.order-step { display: flex; gap: 8px; padding: 3px 0; border-bottom: 1px solid #232a35; }
+.order-step:last-child { border-bottom: 0; }
+.order-step .lvl {
+    flex: 0 0 20px;
+    text-align: right;
+    color: var(--accent);
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+}
+.order-step .names { flex: 1 1 auto; font-size: 11px; word-break: break-word; }
+.order-step .names .exp { color: var(--fg); font-weight: 600; }
+.order-step .names .priv { color: var(--fg-dim); }
+/* Shown only where a name is shared by more than one node - see 0008-t2 in
+   the ledger. Quieter and smaller than the name it follows: it is there to be
+   read when two entries look identical, not to be read first. */
+.order-step .names .qual {
+    color: var(--fg-dim);
+    font-weight: 400;
+    font-size: 10px;
+    opacity: 0.75;
+}
+.order-step .names .qual::before { content: ' \00b7 '; }
+/* break-word because the names in here can carry a path qualifier when two of
+   them are the same name, and an unbroken path ran off the right edge. */
+.order-cycle { margin-top: 8px; padding: 7px 9px; background: #3a2016; border: 1px solid var(--danger); border-radius: 4px; font-size: 11px; word-break: break-word; }
+
+#details { border-top: 1px solid var(--line); padding-top: 12px; }
+#details dl { margin: 0; display: grid; grid-template-columns: auto 1fr; gap: 4px 10px; }
+#details dt { color: var(--fg-dim); font-size: 11px; }
+#details dd { margin: 0; word-break: break-word; }
+.path {
+    font-family: Consolas, "SF Mono", Menlo, monospace;
+    font-size: 11px;
+    background: var(--panel-2);
+    border: 1px solid var(--line);
+    border-radius: 3px;
+    padding: 4px 6px;
+    user-select: all;
+    display: block;
+}
+
+.legend { display: flex; flex-direction: column; gap: 4px; font-size: 11px; color: var(--fg-dim); }
+.legend .row { display: flex; align-items: center; gap: 7px; }
+.legend .line { width: 22px; height: 0; border-top-width: 2px; flex: 0 0 auto; }
+.legend .chip { width: 26px; height: 14px; border-radius: 3px; flex: 0 0 auto; }
+
+#banner {
+    position: absolute;
+    top: 10px; left: 10px; right: 10px;
+    z-index: 10;
+    display: none;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 9px 12px;
+    background: #3a3016;
+    border: 1px solid var(--warn);
+    border-radius: 4px;
+    color: #f8e7bd;
+    font-size: 12px;
+}
+#banner #banner-text { margin-right: auto; }
+#banner button { flex: 0 0 auto; background: transparent; border-color: transparent; color: inherit; }
+#banner #banner-copy { border-color: var(--warn); border-radius: 3px; padding: 1px 8px; }
+
+#template-notice {
+    max-height: 100%;
+    overflow-y: auto;
+    margin: 40px auto;
+    max-width: 640px;
+    padding: 20px 24px;
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-left: 3px solid var(--warn);
+    border-radius: 4px;
+}
+#template-notice h2 { margin-top: 0; font-size: 15px; }
+#template-notice code { background: var(--panel-2); padding: 1px 5px; border-radius: 3px; }
+
+.fatal { max-height: 100%; overflow-y: auto; margin: 60px auto; max-width: 620px; padding: 24px; background: var(--panel); border: 1px solid var(--danger); border-radius: 6px; }
+.fatal h2 { margin-top: 0; color: var(--danger); font-size: 16px; }

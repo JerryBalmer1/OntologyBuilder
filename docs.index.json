@@ -1,0 +1,1657 @@
+{
+  "namespace": "microsoft",
+  "name": "azuredevops",
+  "version": "1.16.0",
+  "versionId": "102784",
+  "fetchedUtc": "2026-09-27T02:39:56.0256751Z",
+  "docCount": 183,
+  "docs": [
+    {
+      "id": "12886396",
+      "slug": "agent_pool",
+      "category": "data-sources",
+      "subcategory": null,
+      "title": "agent_pool",
+      "file": "data-sources/agent_pool.md",
+      "bytes": 1699
+    },
+    {
+      "id": "12886397",
+      "slug": "agent_pools",
+      "category": "data-sources",
+      "subcategory": null,
+      "title": "agent_pools",
+      "file": "data-sources/agent_pools.md",
+      "bytes": 1967
+    },
+    {
+      "id": "12886398",
+      "slug": "agent_queue",
+      "category": "data-sources",
+      "subcategory": null,
+      "title": "agent_queue",
+      "file": "data-sources/agent_queue.md",
+      "bytes": 1758
+    },
+    {
+      "id": "12886399",
+      "slug": "area",
+      "category": "data-sources",
+      "subcategory": null,
+      "title": "area",
+      "file": "data-sources/area.md",
+      "bytes": 2460
+    },
+    {
+      "id": "12886400",
+      "slug": "build_definition",
+      "category": "data-sources",
+      "subcategory": null,
+      "title": "build_definition",
+      "file": "data-sources/build_definition.md",
+      "bytes": 7561
+    },
+    {
+      "id": "12886401",
+      "slug": "client_config",
+      "category": "data-sources",
+      "subcategory": null,
+      "title": "client_config",
+      "file": "data-sources/client_config.md",
+      "bytes": 1193
+    },
+    {
+      "id": "12886402",
+      "slug": "descriptor",
+      "category": "data-sources",
+      "subcategory": null,
+      "title": "descriptor",
+      "file": "data-sources/descriptor.md",
+      "bytes": 1310
+    },
+    {
+      "id": "12886403",
+      "slug": "environment",
+      "category": "data-sources",
+      "subcategory": null,
+      "title": "environment",
+      "file": "data-sources/environment.md",
+      "bytes": 1789
+    },
+    {
+      "id": "12886404",
+      "slug": "feed",
+      "category": "data-sources",
+      "subcategory": null,
+      "title": "feed",
+      "file": "data-sources/feed.md",
+      "bytes": 1576
+    },
+    {
+      "id": "12886405",
+      "slug": "git_repositories",
+      "category": "data-sources",
+      "subcategory": null,
+      "title": "git_repositories",
+      "file": "data-sources/git_repositories.md",
+      "bytes": 2593
+    },
+    {
+      "id": "12886406",
+      "slug": "git_repository",
+      "category": "data-sources",
+      "subcategory": null,
+      "title": "git_repository",
+      "file": "data-sources/git_repository.md",
+      "bytes": 2001
+    },
+    {
+      "id": "12886407",
+      "slug": "git_repository_file",
+      "category": "data-sources",
+      "subcategory": null,
+      "title": "git_repository_file",
+      "file": "data-sources/git_repository_file.md",
+      "bytes": 1814
+    },
+    {
+      "id": "12886408",
+      "slug": "group",
+      "category": "data-sources",
+      "subcategory": null,
+      "title": "group",
+      "file": "data-sources/group.md",
+      "bytes": 2646
+    },
+    {
+      "id": "12886409",
+      "slug": "group_membership",
+      "category": "data-sources",
+      "subcategory": null,
+      "title": "group_membership",
+      "file": "data-sources/group_membership.md",
+      "bytes": 1201
+    },
+    {
+      "id": "12886410",
+      "slug": "groups",
+      "category": "data-sources",
+      "subcategory": null,
+      "title": "groups",
+      "file": "data-sources/groups.md",
+      "bytes": 3286
+    },
+    {
+      "id": "12886411",
+      "slug": "identity_group",
+      "category": "data-sources",
+      "subcategory": null,
+      "title": "identity_group",
+      "file": "data-sources/identity_group.md",
+      "bytes": 1653
+    },
+    {
+      "id": "12886412",
+      "slug": "identity_groups",
+      "category": "data-sources",
+      "subcategory": null,
+      "title": "identity_groups",
+      "file": "data-sources/identity_groups.md",
+      "bytes": 1842
+    },
+    {
+      "id": "12886413",
+      "slug": "identity_user",
+      "category": "data-sources",
+      "subcategory": null,
+      "title": "identity_user",
+      "file": "data-sources/identity_user.md",
+      "bytes": 1904
+    },
+    {
+      "id": "12886414",
+      "slug": "iteration",
+      "category": "data-sources",
+      "subcategory": null,
+      "title": "iteration",
+      "file": "data-sources/iteration.md",
+      "bytes": 2740
+    },
+    {
+      "id": "12886415",
+      "slug": "project",
+      "category": "data-sources",
+      "subcategory": null,
+      "title": "project",
+      "file": "data-sources/project.md",
+      "bytes": 1630
+    },
+    {
+      "id": "12886416",
+      "slug": "projects",
+      "category": "data-sources",
+      "subcategory": null,
+      "title": "projects",
+      "file": "data-sources/projects.md",
+      "bytes": 2118
+    },
+    {
+      "id": "12886417",
+      "slug": "security_namespace",
+      "category": "data-sources",
+      "subcategory": null,
+      "title": "security_namespace",
+      "file": "data-sources/security_namespace.md",
+      "bytes": 2445
+    },
+    {
+      "id": "12886418",
+      "slug": "security_namespace_token",
+      "category": "data-sources",
+      "subcategory": null,
+      "title": "security_namespace_token",
+      "file": "data-sources/security_namespace_token.md",
+      "bytes": 8109
+    },
+    {
+      "id": "12886419",
+      "slug": "security_namespaces",
+      "category": "data-sources",
+      "subcategory": null,
+      "title": "security_namespaces",
+      "file": "data-sources/security_namespaces.md",
+      "bytes": 4445
+    },
+    {
+      "id": "12886420",
+      "slug": "securityrole_definitions",
+      "category": "data-sources",
+      "subcategory": null,
+      "title": "securityrole_definitions",
+      "file": "data-sources/securityrole_definitions.md",
+      "bytes": 2189
+    },
+    {
+      "id": "12886421",
+      "slug": "service_principal",
+      "category": "data-sources",
+      "subcategory": null,
+      "title": "service_principal",
+      "file": "data-sources/service_principal.md",
+      "bytes": 1554
+    },
+    {
+      "id": "12886422",
+      "slug": "serviceendpoint_azurecr",
+      "category": "data-sources",
+      "subcategory": null,
+      "title": "serviceendpoint_azurecr",
+      "file": "data-sources/serviceendpoint_azurecr.md",
+      "bytes": 2259
+    },
+    {
+      "id": "12886423",
+      "slug": "serviceendpoint_azurerm",
+      "category": "data-sources",
+      "subcategory": null,
+      "title": "serviceendpoint_azurerm",
+      "file": "data-sources/serviceendpoint_azurerm.md",
+      "bytes": 3230
+    },
+    {
+      "id": "12886424",
+      "slug": "serviceendpoint_bitbucket",
+      "category": "data-sources",
+      "subcategory": null,
+      "title": "serviceendpoint_bitbucket",
+      "file": "data-sources/serviceendpoint_bitbucket.md",
+      "bytes": 2225
+    },
+    {
+      "id": "12886425",
+      "slug": "serviceendpoint_dockerregistry",
+      "category": "data-sources",
+      "subcategory": null,
+      "title": "serviceendpoint_dockerregistry",
+      "file": "data-sources/serviceendpoint_dockerregistry.md",
+      "bytes": 2506
+    },
+    {
+      "id": "12886426",
+      "slug": "serviceendpoint_generic_v2",
+      "category": "data-sources",
+      "subcategory": null,
+      "title": "serviceendpoint_generic_v2",
+      "file": "data-sources/serviceendpoint_generic_v2.md",
+      "bytes": 1830
+    },
+    {
+      "id": "12886427",
+      "slug": "serviceendpoint_github",
+      "category": "data-sources",
+      "subcategory": null,
+      "title": "serviceendpoint_github",
+      "file": "data-sources/serviceendpoint_github.md",
+      "bytes": 2135
+    },
+    {
+      "id": "12886428",
+      "slug": "serviceendpoint_npm",
+      "category": "data-sources",
+      "subcategory": null,
+      "title": "serviceendpoint_npm",
+      "file": "data-sources/serviceendpoint_npm.md",
+      "bytes": 1506
+    },
+    {
+      "id": "12886429",
+      "slug": "serviceendpoint_sonarcloud",
+      "category": "data-sources",
+      "subcategory": null,
+      "title": "serviceendpoint_sonarcloud",
+      "file": "data-sources/serviceendpoint_sonarcloud.md",
+      "bytes": 1517
+    },
+    {
+      "id": "12886430",
+      "slug": "serviceendpoint_type",
+      "category": "data-sources",
+      "subcategory": null,
+      "title": "serviceendpoint_type",
+      "file": "data-sources/serviceendpoint_type.md",
+      "bytes": 3554
+    },
+    {
+      "id": "12886431",
+      "slug": "serviceendpoint_types",
+      "category": "data-sources",
+      "subcategory": null,
+      "title": "serviceendpoint_types",
+      "file": "data-sources/serviceendpoint_types.md",
+      "bytes": 1794
+    },
+    {
+      "id": "12886432",
+      "slug": "storage_key",
+      "category": "data-sources",
+      "subcategory": null,
+      "title": "storage_key",
+      "file": "data-sources/storage_key.md",
+      "bytes": 1250
+    },
+    {
+      "id": "12886433",
+      "slug": "team",
+      "category": "data-sources",
+      "subcategory": null,
+      "title": "team",
+      "file": "data-sources/team.md",
+      "bytes": 1857
+    },
+    {
+      "id": "12886434",
+      "slug": "teams",
+      "category": "data-sources",
+      "subcategory": null,
+      "title": "teams",
+      "file": "data-sources/teams.md",
+      "bytes": 2129
+    },
+    {
+      "id": "12886435",
+      "slug": "user",
+      "category": "data-sources",
+      "subcategory": null,
+      "title": "user",
+      "file": "data-sources/user.md",
+      "bytes": 1595
+    },
+    {
+      "id": "12886436",
+      "slug": "users",
+      "category": "data-sources",
+      "subcategory": null,
+      "title": "users",
+      "file": "data-sources/users.md",
+      "bytes": 5480
+    },
+    {
+      "id": "12886437",
+      "slug": "variable_group",
+      "category": "data-sources",
+      "subcategory": null,
+      "title": "variable_group",
+      "file": "data-sources/variable_group.md",
+      "bytes": 2436
+    },
+    {
+      "id": "12886438",
+      "slug": "workitemtrackingprocess_process",
+      "category": "data-sources",
+      "subcategory": null,
+      "title": "workitemtrackingprocess_process",
+      "file": "data-sources/workitemtrackingprocess_process.md",
+      "bytes": 2172
+    },
+    {
+      "id": "12886439",
+      "slug": "workitemtrackingprocess_processes",
+      "category": "data-sources",
+      "subcategory": null,
+      "title": "workitemtrackingprocess_processes",
+      "file": "data-sources/workitemtrackingprocess_processes.md",
+      "bytes": 2273
+    },
+    {
+      "id": "12886440",
+      "slug": "workitemtrackingprocess_workitemtype",
+      "category": "data-sources",
+      "subcategory": null,
+      "title": "workitemtrackingprocess_workitemtype",
+      "file": "data-sources/workitemtrackingprocess_workitemtype.md",
+      "bytes": 1938
+    },
+    {
+      "id": "12886441",
+      "slug": "workitemtrackingprocess_workitemtypes",
+      "category": "data-sources",
+      "subcategory": null,
+      "title": "workitemtrackingprocess_workitemtypes",
+      "file": "data-sources/workitemtrackingprocess_workitemtypes.md",
+      "bytes": 2067
+    },
+    {
+      "id": "12886442",
+      "slug": "authenticating_managed_identity",
+      "category": "guides",
+      "subcategory": null,
+      "title": "Azure DevOps Provider: Authenticating via Managed Identity",
+      "file": "guides/authenticating_managed_identity.md",
+      "bytes": 3318
+    },
+    {
+      "id": "12886443",
+      "slug": "authenticating_service_principal_using_a_client_certificate",
+      "category": "guides",
+      "subcategory": null,
+      "title": "Azure DevOps Provider: Authenticating to a Service Principal with a Client Certificate",
+      "file": "guides/authenticating_service_principal_using_a_client_certificate.md",
+      "bytes": 3568
+    },
+    {
+      "id": "12886444",
+      "slug": "authenticating_service_principal_using_a_client_secret",
+      "category": "guides",
+      "subcategory": null,
+      "title": "Azure DevOps Provider: Authenticating to a Service Principal with a Client Secret",
+      "file": "guides/authenticating_service_principal_using_a_client_secret.md",
+      "bytes": 3016
+    },
+    {
+      "id": "12886445",
+      "slug": "authenticating_service_principal_using_an_oidc_token",
+      "category": "guides",
+      "subcategory": null,
+      "title": "Azure DevOps Provider: Authenticating to a Service Principal with an OIDC Token",
+      "file": "guides/authenticating_service_principal_using_an_oidc_token.md",
+      "bytes": 6752
+    },
+    {
+      "id": "12886446",
+      "slug": "authenticating_using_the_personal_access_token",
+      "category": "guides",
+      "subcategory": null,
+      "title": "Azure DevOps Provider: Authenticating with Personal Access Token",
+      "file": "guides/authenticating_using_the_personal_access_token.md",
+      "bytes": 3157
+    },
+    {
+      "id": "12886264",
+      "slug": "index",
+      "category": "overview",
+      "subcategory": null,
+      "title": "overview",
+      "file": "overview/index.md",
+      "bytes": 6860
+    },
+    {
+      "id": "12886265",
+      "slug": "agent_pool",
+      "category": "resources",
+      "subcategory": null,
+      "title": "agent_pool",
+      "file": "resources/agent_pool.md",
+      "bytes": 1831
+    },
+    {
+      "id": "12886266",
+      "slug": "agent_queue",
+      "category": "resources",
+      "subcategory": null,
+      "title": "agent_queue",
+      "file": "resources/agent_queue.md",
+      "bytes": 2903
+    },
+    {
+      "id": "12886267",
+      "slug": "area",
+      "category": "resources",
+      "subcategory": null,
+      "title": "area",
+      "file": "resources/area.md",
+      "bytes": 2089
+    },
+    {
+      "id": "12886268",
+      "slug": "area_permissions",
+      "category": "resources",
+      "subcategory": null,
+      "title": "area_permissions",
+      "file": "resources/area_permissions.md",
+      "bytes": 3374
+    },
+    {
+      "id": "12886269",
+      "slug": "branch_policy_auto_reviewers",
+      "category": "resources",
+      "subcategory": null,
+      "title": "branch_policy_auto_reviewers",
+      "file": "resources/branch_policy_auto_reviewers.md",
+      "bytes": 4685
+    },
+    {
+      "id": "12886270",
+      "slug": "branch_policy_build_validation",
+      "category": "resources",
+      "subcategory": null,
+      "title": "branch_policy_build_validation",
+      "file": "resources/branch_policy_build_validation.md",
+      "bytes": 5576
+    },
+    {
+      "id": "12886271",
+      "slug": "branch_policy_comment_resolution",
+      "category": "resources",
+      "subcategory": null,
+      "title": "branch_policy_comment_resolution",
+      "file": "resources/branch_policy_comment_resolution.md",
+      "bytes": 3691
+    },
+    {
+      "id": "12886272",
+      "slug": "branch_policy_merge_types",
+      "category": "resources",
+      "subcategory": null,
+      "title": "branch_policy_merge_types",
+      "file": "resources/branch_policy_merge_types.md",
+      "bytes": 4115
+    },
+    {
+      "id": "12886273",
+      "slug": "branch_policy_min_reviewers",
+      "category": "resources",
+      "subcategory": null,
+      "title": "branch_policy_min_reviewers",
+      "file": "resources/branch_policy_min_reviewers.md",
+      "bytes": 5169
+    },
+    {
+      "id": "12886274",
+      "slug": "branch_policy_status_check",
+      "category": "resources",
+      "subcategory": null,
+      "title": "branch_policy_status_check",
+      "file": "resources/branch_policy_status_check.md",
+      "bytes": 5238
+    },
+    {
+      "id": "12886275",
+      "slug": "branch_policy_work_item_linking",
+      "category": "resources",
+      "subcategory": null,
+      "title": "branch_policy_work_item_linking",
+      "file": "resources/branch_policy_work_item_linking.md",
+      "bytes": 3667
+    },
+    {
+      "id": "12886276",
+      "slug": "build_definition",
+      "category": "resources",
+      "subcategory": null,
+      "title": "build_definition",
+      "file": "resources/build_definition.md",
+      "bytes": 24120
+    },
+    {
+      "id": "12886277",
+      "slug": "build_definition_permissions",
+      "category": "resources",
+      "subcategory": null,
+      "title": "build_definition_permissions",
+      "file": "resources/build_definition_permissions.md",
+      "bytes": 4815
+    },
+    {
+      "id": "12886278",
+      "slug": "build_folder",
+      "category": "resources",
+      "subcategory": null,
+      "title": "build_folder",
+      "file": "resources/build_folder.md",
+      "bytes": 1603
+    },
+    {
+      "id": "12886279",
+      "slug": "build_folder_permissions",
+      "category": "resources",
+      "subcategory": null,
+      "title": "build_folder_permissions",
+      "file": "resources/build_folder_permissions.md",
+      "bytes": 5038
+    },
+    {
+      "id": "12886280",
+      "slug": "check_approval",
+      "category": "resources",
+      "subcategory": null,
+      "title": "check_approval",
+      "file": "resources/check_approval.md",
+      "bytes": 3589
+    },
+    {
+      "id": "12886281",
+      "slug": "check_branch_control",
+      "category": "resources",
+      "subcategory": null,
+      "title": "check_branch_control",
+      "file": "resources/check_branch_control.md",
+      "bytes": 6114
+    },
+    {
+      "id": "12886282",
+      "slug": "check_business_hours",
+      "category": "resources",
+      "subcategory": null,
+      "title": "check_business_hours",
+      "file": "resources/check_business_hours.md",
+      "bytes": 10439
+    },
+    {
+      "id": "12886283",
+      "slug": "check_exclusive_lock",
+      "category": "resources",
+      "subcategory": null,
+      "title": "check_exclusive_lock",
+      "file": "resources/check_exclusive_lock.md",
+      "bytes": 3753
+    },
+    {
+      "id": "12886284",
+      "slug": "check_required_template",
+      "category": "resources",
+      "subcategory": null,
+      "title": "check_required_template",
+      "file": "resources/check_required_template.md",
+      "bytes": 3948
+    },
+    {
+      "id": "12886285",
+      "slug": "check_rest_api",
+      "category": "resources",
+      "subcategory": null,
+      "title": "check_rest_api",
+      "file": "resources/check_rest_api.md",
+      "bytes": 5341
+    },
+    {
+      "id": "12886286",
+      "slug": "dashboard",
+      "category": "resources",
+      "subcategory": null,
+      "title": "dashboard",
+      "file": "resources/dashboard.md",
+      "bytes": 2889
+    },
+    {
+      "id": "12886287",
+      "slug": "deployment_group",
+      "category": "resources",
+      "subcategory": null,
+      "title": "deployment_group",
+      "file": "resources/deployment_group.md",
+      "bytes": 2327
+    },
+    {
+      "id": "12886288",
+      "slug": "elastic_pool",
+      "category": "resources",
+      "subcategory": null,
+      "title": "elastic_pool",
+      "file": "resources/elastic_pool.md",
+      "bytes": 3785
+    },
+    {
+      "id": "12886289",
+      "slug": "environment",
+      "category": "resources",
+      "subcategory": null,
+      "title": "environment",
+      "file": "resources/environment.md",
+      "bytes": 1881
+    },
+    {
+      "id": "12886290",
+      "slug": "environment_kubernetes_resource",
+      "category": "resources",
+      "subcategory": null,
+      "title": "environment_kubernetes_resource",
+      "file": "resources/environment_kubernetes_resource.md",
+      "bytes": 3087
+    },
+    {
+      "id": "12886291",
+      "slug": "extension",
+      "category": "resources",
+      "subcategory": null,
+      "title": "extension",
+      "file": "resources/extension.md",
+      "bytes": 1925
+    },
+    {
+      "id": "12886292",
+      "slug": "feed",
+      "category": "resources",
+      "subcategory": null,
+      "title": "feed",
+      "file": "resources/feed.md",
+      "bytes": 2770
+    },
+    {
+      "id": "12886293",
+      "slug": "feed_permission",
+      "category": "resources",
+      "subcategory": null,
+      "title": "feed_permission",
+      "file": "resources/feed_permission.md",
+      "bytes": 2902
+    },
+    {
+      "id": "12886294",
+      "slug": "feed_retention_policy",
+      "category": "resources",
+      "subcategory": null,
+      "title": "feed_retention_policy",
+      "file": "resources/feed_retention_policy.md",
+      "bytes": 3049
+    },
+    {
+      "id": "12886295",
+      "slug": "git_permissions",
+      "category": "resources",
+      "subcategory": null,
+      "title": "git_permissions",
+      "file": "resources/git_permissions.md",
+      "bytes": 8778
+    },
+    {
+      "id": "12886296",
+      "slug": "git_repository",
+      "category": "resources",
+      "subcategory": null,
+      "title": "git_repository",
+      "file": "resources/git_repository.md",
+      "bytes": 9850
+    },
+    {
+      "id": "12886297",
+      "slug": "git_repository_branch",
+      "category": "resources",
+      "subcategory": null,
+      "title": "git_repository_branch",
+      "file": "resources/git_repository_branch.md",
+      "bytes": 2671
+    },
+    {
+      "id": "12886298",
+      "slug": "git_repository_file",
+      "category": "resources",
+      "subcategory": null,
+      "title": "git_repository_file",
+      "file": "resources/git_repository_file.md",
+      "bytes": 4491
+    },
+    {
+      "id": "12886299",
+      "slug": "group",
+      "category": "resources",
+      "subcategory": null,
+      "title": "group",
+      "file": "resources/group.md",
+      "bytes": 3796
+    },
+    {
+      "id": "12886300",
+      "slug": "group_entitlement",
+      "category": "resources",
+      "subcategory": null,
+      "title": "group_entitlement",
+      "file": "resources/group_entitlement.md",
+      "bytes": 3173
+    },
+    {
+      "id": "12886301",
+      "slug": "group_membership",
+      "category": "resources",
+      "subcategory": null,
+      "title": "group_membership",
+      "file": "resources/group_membership.md",
+      "bytes": 2743
+    },
+    {
+      "id": "12886302",
+      "slug": "iteration_permissions",
+      "category": "resources",
+      "subcategory": null,
+      "title": "iteration_permissions",
+      "file": "resources/iteration_permissions.md",
+      "bytes": 3252
+    },
+    {
+      "id": "12886303",
+      "slug": "library_permissions",
+      "category": "resources",
+      "subcategory": null,
+      "title": "library_permissions",
+      "file": "resources/library_permissions.md",
+      "bytes": 2895
+    },
+    {
+      "id": "12886304",
+      "slug": "pipeline_authorization",
+      "category": "resources",
+      "subcategory": null,
+      "title": "pipeline_authorization",
+      "file": "resources/pipeline_authorization.md",
+      "bytes": 4508
+    },
+    {
+      "id": "12886305",
+      "slug": "project",
+      "category": "resources",
+      "subcategory": null,
+      "title": "project",
+      "file": "resources/project.md",
+      "bytes": 3202
+    },
+    {
+      "id": "12886306",
+      "slug": "project_features",
+      "category": "resources",
+      "subcategory": null,
+      "title": "project_features",
+      "file": "resources/project_features.md",
+      "bytes": 2471
+    },
+    {
+      "id": "12886307",
+      "slug": "project_permissions",
+      "category": "resources",
+      "subcategory": null,
+      "title": "project_permissions",
+      "file": "resources/project_permissions.md",
+      "bytes": 4576
+    },
+    {
+      "id": "12886308",
+      "slug": "project_pipeline_settings",
+      "category": "resources",
+      "subcategory": null,
+      "title": "project_pipeline_settings",
+      "file": "resources/project_pipeline_settings.md",
+      "bytes": 2942
+    },
+    {
+      "id": "12886309",
+      "slug": "project_tags",
+      "category": "resources",
+      "subcategory": null,
+      "title": "project_tags",
+      "file": "resources/project_tags.md",
+      "bytes": 1822
+    },
+    {
+      "id": "12886310",
+      "slug": "repository_policy_author_email_pattern",
+      "category": "resources",
+      "subcategory": null,
+      "title": "repository_policy_author_email_pattern",
+      "file": "resources/repository_policy_author_email_pattern.md",
+      "bytes": 3555
+    },
+    {
+      "id": "12886311",
+      "slug": "repository_policy_case_enforcement",
+      "category": "resources",
+      "subcategory": null,
+      "title": "repository_policy_case_enforcement",
+      "file": "resources/repository_policy_case_enforcement.md",
+      "bytes": 3474
+    },
+    {
+      "id": "12886312",
+      "slug": "repository_policy_check_credentials",
+      "category": "resources",
+      "subcategory": null,
+      "title": "repository_policy_check_credentials",
+      "file": "resources/repository_policy_check_credentials.md",
+      "bytes": 3307
+    },
+    {
+      "id": "12886313",
+      "slug": "repository_policy_file_path_pattern",
+      "category": "resources",
+      "subcategory": null,
+      "title": "repository_policy_file_path_pattern",
+      "file": "resources/repository_policy_file_path_pattern.md",
+      "bytes": 3524
+    },
+    {
+      "id": "12886314",
+      "slug": "repository_policy_max_file_size",
+      "category": "resources",
+      "subcategory": null,
+      "title": "repository_policy_max_file_size",
+      "file": "resources/repository_policy_max_file_size.md",
+      "bytes": 3367
+    },
+    {
+      "id": "12886315",
+      "slug": "repository_policy_max_path_length",
+      "category": "resources",
+      "subcategory": null,
+      "title": "repository_policy_max_path_length",
+      "file": "resources/repository_policy_max_path_length.md",
+      "bytes": 3343
+    },
+    {
+      "id": "12886316",
+      "slug": "repository_policy_reserved_names",
+      "category": "resources",
+      "subcategory": null,
+      "title": "repository_policy_reserved_names",
+      "file": "resources/repository_policy_reserved_names.md",
+      "bytes": 3274
+    },
+    {
+      "id": "12886317",
+      "slug": "resource_authorization",
+      "category": "resources",
+      "subcategory": null,
+      "title": "resource_authorization",
+      "file": "resources/resource_authorization.md",
+      "bytes": 1892
+    },
+    {
+      "id": "12886318",
+      "slug": "security_permissions",
+      "category": "resources",
+      "subcategory": null,
+      "title": "security_permissions",
+      "file": "resources/security_permissions.md",
+      "bytes": 10023
+    },
+    {
+      "id": "12886319",
+      "slug": "securityrole_assignment",
+      "category": "resources",
+      "subcategory": null,
+      "title": "securityrole_assignment",
+      "file": "resources/securityrole_assignment.md",
+      "bytes": 2951
+    },
+    {
+      "id": "12886320",
+      "slug": "service_principal_entitlement",
+      "category": "resources",
+      "subcategory": null,
+      "title": "service_principal_entitlement",
+      "file": "resources/service_principal_entitlement.md",
+      "bytes": 2433
+    },
+    {
+      "id": "12886321",
+      "slug": "serviceendpoint_argocd",
+      "category": "resources",
+      "subcategory": null,
+      "title": "serviceendpoint_argocd",
+      "file": "resources/serviceendpoint_argocd.md",
+      "bytes": 3937
+    },
+    {
+      "id": "12886322",
+      "slug": "serviceendpoint_artifactory",
+      "category": "resources",
+      "subcategory": null,
+      "title": "serviceendpoint_artifactory",
+      "file": "resources/serviceendpoint_artifactory.md",
+      "bytes": 3929
+    },
+    {
+      "id": "12886323",
+      "slug": "serviceendpoint_aws",
+      "category": "resources",
+      "subcategory": null,
+      "title": "serviceendpoint_aws",
+      "file": "resources/serviceendpoint_aws.md",
+      "bytes": 3244
+    },
+    {
+      "id": "12886324",
+      "slug": "serviceendpoint_azure_service_bus",
+      "category": "resources",
+      "subcategory": null,
+      "title": "serviceendpoint_azure_service_bus",
+      "file": "resources/serviceendpoint_azure_service_bus.md",
+      "bytes": 2539
+    },
+    {
+      "id": "12886325",
+      "slug": "serviceendpoint_azurecr",
+      "category": "resources",
+      "subcategory": null,
+      "title": "serviceendpoint_azurecr",
+      "file": "resources/serviceendpoint_azurecr.md",
+      "bytes": 6213
+    },
+    {
+      "id": "12886326",
+      "slug": "serviceendpoint_azuredevops",
+      "category": "resources",
+      "subcategory": null,
+      "title": "serviceendpoint_azuredevops",
+      "file": "resources/serviceendpoint_azuredevops.md",
+      "bytes": 2515
+    },
+    {
+      "id": "12886327",
+      "slug": "serviceendpoint_azurerm",
+      "category": "resources",
+      "subcategory": null,
+      "title": "serviceendpoint_azurerm",
+      "file": "resources/serviceendpoint_azurerm.md",
+      "bytes": 11918
+    },
+    {
+      "id": "12886328",
+      "slug": "serviceendpoint_bitbucket",
+      "category": "resources",
+      "subcategory": null,
+      "title": "serviceendpoint_bitbucket",
+      "file": "resources/serviceendpoint_bitbucket.md",
+      "bytes": 3265
+    },
+    {
+      "id": "12886329",
+      "slug": "serviceendpoint_black_duck",
+      "category": "resources",
+      "subcategory": null,
+      "title": "serviceendpoint_black_duck",
+      "file": "resources/serviceendpoint_black_duck.md",
+      "bytes": 2638
+    },
+    {
+      "id": "12886330",
+      "slug": "serviceendpoint_checkmarx_one",
+      "category": "resources",
+      "subcategory": null,
+      "title": "serviceendpoint_checkmarx_one",
+      "file": "resources/serviceendpoint_checkmarx_one.md",
+      "bytes": 3688
+    },
+    {
+      "id": "12886331",
+      "slug": "serviceendpoint_checkmarx_sast",
+      "category": "resources",
+      "subcategory": null,
+      "title": "serviceendpoint_checkmarx_sast",
+      "file": "resources/serviceendpoint_checkmarx_sast.md",
+      "bytes": 3337
+    },
+    {
+      "id": "12886332",
+      "slug": "serviceendpoint_checkmarx_sca",
+      "category": "resources",
+      "subcategory": null,
+      "title": "serviceendpoint_checkmarx_sca",
+      "file": "resources/serviceendpoint_checkmarx_sca.md",
+      "bytes": 3112
+    },
+    {
+      "id": "12886333",
+      "slug": "serviceendpoint_dockerregistry",
+      "category": "resources",
+      "subcategory": null,
+      "title": "serviceendpoint_dockerregistry",
+      "file": "resources/serviceendpoint_dockerregistry.md",
+      "bytes": 3476
+    },
+    {
+      "id": "12886334",
+      "slug": "serviceendpoint_dynamics_lifecycle_services",
+      "category": "resources",
+      "subcategory": null,
+      "title": "serviceendpoint_dynamics_lifecycle_services",
+      "file": "resources/serviceendpoint_dynamics_lifecycle_services.md",
+      "bytes": 3489
+    },
+    {
+      "id": "12886335",
+      "slug": "serviceendpoint_externaltfs",
+      "category": "resources",
+      "subcategory": null,
+      "title": "serviceendpoint_externaltfs",
+      "file": "resources/serviceendpoint_externaltfs.md",
+      "bytes": 3075
+    },
+    {
+      "id": "12886336",
+      "slug": "serviceendpoint_gcp_terraform",
+      "category": "resources",
+      "subcategory": null,
+      "title": "serviceendpoint_gcp_terraform",
+      "file": "resources/serviceendpoint_gcp_terraform.md",
+      "bytes": 3238
+    },
+    {
+      "id": "12886337",
+      "slug": "serviceendpoint_generic",
+      "category": "resources",
+      "subcategory": null,
+      "title": "serviceendpoint_generic",
+      "file": "resources/serviceendpoint_generic.md",
+      "bytes": 2893
+    },
+    {
+      "id": "12886338",
+      "slug": "serviceendpoint_generic_git",
+      "category": "resources",
+      "subcategory": null,
+      "title": "serviceendpoint_generic_git",
+      "file": "resources/serviceendpoint_generic_git.md",
+      "bytes": 3314
+    },
+    {
+      "id": "12886339",
+      "slug": "serviceendpoint_generic_v2",
+      "category": "resources",
+      "subcategory": null,
+      "title": "serviceendpoint_generic_v2",
+      "file": "resources/serviceendpoint_generic_v2.md",
+      "bytes": 3015
+    },
+    {
+      "id": "12886340",
+      "slug": "serviceendpoint_github",
+      "category": "resources",
+      "subcategory": null,
+      "title": "serviceendpoint_github",
+      "file": "resources/serviceendpoint_github.md",
+      "bytes": 4256
+    },
+    {
+      "id": "12886341",
+      "slug": "serviceendpoint_github_enterprise",
+      "category": "resources",
+      "subcategory": null,
+      "title": "serviceendpoint_github_enterprise",
+      "file": "resources/serviceendpoint_github_enterprise.md",
+      "bytes": 3965
+    },
+    {
+      "id": "12886342",
+      "slug": "serviceendpoint_gitlab",
+      "category": "resources",
+      "subcategory": null,
+      "title": "serviceendpoint_gitlab",
+      "file": "resources/serviceendpoint_gitlab.md",
+      "bytes": 2686
+    },
+    {
+      "id": "12886343",
+      "slug": "serviceendpoint_incomingwebhook",
+      "category": "resources",
+      "subcategory": null,
+      "title": "serviceendpoint_incomingwebhook",
+      "file": "resources/serviceendpoint_incomingwebhook.md",
+      "bytes": 2728
+    },
+    {
+      "id": "12886344",
+      "slug": "serviceendpoint_jenkins",
+      "category": "resources",
+      "subcategory": null,
+      "title": "serviceendpoint_jenkins",
+      "file": "resources/serviceendpoint_jenkins.md",
+      "bytes": 2760
+    },
+    {
+      "id": "12886345",
+      "slug": "serviceendpoint_jfrog_artifactory_v2",
+      "category": "resources",
+      "subcategory": null,
+      "title": "serviceendpoint_jfrog_artifactory_v2",
+      "file": "resources/serviceendpoint_jfrog_artifactory_v2.md",
+      "bytes": 4015
+    },
+    {
+      "id": "12886346",
+      "slug": "serviceendpoint_jfrog_distribution_v2",
+      "category": "resources",
+      "subcategory": null,
+      "title": "serviceendpoint_jfrog_distribution_v2",
+      "file": "resources/serviceendpoint_jfrog_distribution_v2.md",
+      "bytes": 4033
+    },
+    {
+      "id": "12886347",
+      "slug": "serviceendpoint_jfrog_platform_v2",
+      "category": "resources",
+      "subcategory": null,
+      "title": "serviceendpoint_jfrog_platform_v2",
+      "file": "resources/serviceendpoint_jfrog_platform_v2.md",
+      "bytes": 3963
+    },
+    {
+      "id": "12886348",
+      "slug": "serviceendpoint_jfrog_xray_v2",
+      "category": "resources",
+      "subcategory": null,
+      "title": "serviceendpoint_jfrog_xray_v2",
+      "file": "resources/serviceendpoint_jfrog_xray_v2.md",
+      "bytes": 3923
+    },
+    {
+      "id": "12886349",
+      "slug": "serviceendpoint_kubernetes",
+      "category": "resources",
+      "subcategory": null,
+      "title": "serviceendpoint_kubernetes",
+      "file": "resources/serviceendpoint_kubernetes.md",
+      "bytes": 6879
+    },
+    {
+      "id": "12886350",
+      "slug": "serviceendpoint_maven",
+      "category": "resources",
+      "subcategory": null,
+      "title": "serviceendpoint_maven",
+      "file": "resources/serviceendpoint_maven.md",
+      "bytes": 3753
+    },
+    {
+      "id": "12886351",
+      "slug": "serviceendpoint_nexus",
+      "category": "resources",
+      "subcategory": null,
+      "title": "serviceendpoint_nexus",
+      "file": "resources/serviceendpoint_nexus.md",
+      "bytes": 2795
+    },
+    {
+      "id": "12886352",
+      "slug": "serviceendpoint_npm",
+      "category": "resources",
+      "subcategory": null,
+      "title": "serviceendpoint_npm",
+      "file": "resources/serviceendpoint_npm.md",
+      "bytes": 2568
+    },
+    {
+      "id": "12886353",
+      "slug": "serviceendpoint_nuget",
+      "category": "resources",
+      "subcategory": null,
+      "title": "serviceendpoint_nuget",
+      "file": "resources/serviceendpoint_nuget.md",
+      "bytes": 2925
+    },
+    {
+      "id": "12886354",
+      "slug": "serviceendpoint_octopusdeploy",
+      "category": "resources",
+      "subcategory": null,
+      "title": "serviceendpoint_octopusdeploy",
+      "file": "resources/serviceendpoint_octopusdeploy.md",
+      "bytes": 2832
+    },
+    {
+      "id": "12886355",
+      "slug": "serviceendpoint_openshift",
+      "category": "resources",
+      "subcategory": null,
+      "title": "serviceendpoint_openshift",
+      "file": "resources/serviceendpoint_openshift.md",
+      "bytes": 4721
+    },
+    {
+      "id": "12886356",
+      "slug": "serviceendpoint_permissions",
+      "category": "resources",
+      "subcategory": null,
+      "title": "serviceendpoint_permissions",
+      "file": "resources/serviceendpoint_permissions.md",
+      "bytes": 3942
+    },
+    {
+      "id": "12886357",
+      "slug": "serviceendpoint_runpipeline",
+      "category": "resources",
+      "subcategory": null,
+      "title": "serviceendpoint_runpipeline",
+      "file": "resources/serviceendpoint_runpipeline.md",
+      "bytes": 3202
+    },
+    {
+      "id": "12886358",
+      "slug": "serviceendpoint_servicefabric",
+      "category": "resources",
+      "subcategory": null,
+      "title": "serviceendpoint_servicefabric",
+      "file": "resources/serviceendpoint_servicefabric.md",
+      "bytes": 6237
+    },
+    {
+      "id": "12886359",
+      "slug": "serviceendpoint_snyk",
+      "category": "resources",
+      "subcategory": null,
+      "title": "serviceendpoint_snyk",
+      "file": "resources/serviceendpoint_snyk.md",
+      "bytes": 2612
+    },
+    {
+      "id": "12886360",
+      "slug": "serviceendpoint_sonarcloud",
+      "category": "resources",
+      "subcategory": null,
+      "title": "serviceendpoint_sonarcloud",
+      "file": "resources/serviceendpoint_sonarcloud.md",
+      "bytes": 2661
+    },
+    {
+      "id": "12886361",
+      "slug": "serviceendpoint_sonarqube",
+      "category": "resources",
+      "subcategory": null,
+      "title": "serviceendpoint_sonarqube",
+      "file": "resources/serviceendpoint_sonarqube.md",
+      "bytes": 2774
+    },
+    {
+      "id": "12886362",
+      "slug": "serviceendpoint_ssh",
+      "category": "resources",
+      "subcategory": null,
+      "title": "serviceendpoint_ssh",
+      "file": "resources/serviceendpoint_ssh.md",
+      "bytes": 2635
+    },
+    {
+      "id": "12886363",
+      "slug": "serviceendpoint_visualstudiomarketplace",
+      "category": "resources",
+      "subcategory": null,
+      "title": "serviceendpoint_visualstudiomarketplace",
+      "file": "resources/serviceendpoint_visualstudiomarketplace.md",
+      "bytes": 4076
+    },
+    {
+      "id": "12886364",
+      "slug": "servicehook_permissions",
+      "category": "resources",
+      "subcategory": null,
+      "title": "servicehook_permissions",
+      "file": "resources/servicehook_permissions.md",
+      "bytes": 2836
+    },
+    {
+      "id": "12886365",
+      "slug": "servicehook_storage_queue_pipelines",
+      "category": "resources",
+      "subcategory": null,
+      "title": "servicehook_storage_queue_pipelines",
+      "file": "resources/servicehook_storage_queue_pipelines.md",
+      "bytes": 5162
+    },
+    {
+      "id": "12886366",
+      "slug": "servicehook_webhook_tfs",
+      "category": "resources",
+      "subcategory": null,
+      "title": "servicehook_webhook_tfs",
+      "file": "resources/servicehook_webhook_tfs.md",
+      "bytes": 12478
+    },
+    {
+      "id": "12886367",
+      "slug": "tagging_permissions",
+      "category": "resources",
+      "subcategory": null,
+      "title": "tagging_permissions",
+      "file": "resources/tagging_permissions.md",
+      "bytes": 2776
+    },
+    {
+      "id": "12886368",
+      "slug": "team",
+      "category": "resources",
+      "subcategory": null,
+      "title": "team",
+      "file": "resources/team.md",
+      "bytes": 4682
+    },
+    {
+      "id": "12886369",
+      "slug": "team_administrators",
+      "category": "resources",
+      "subcategory": null,
+      "title": "team_administrators",
+      "file": "resources/team_administrators.md",
+      "bytes": 3166
+    },
+    {
+      "id": "12886370",
+      "slug": "team_members",
+      "category": "resources",
+      "subcategory": null,
+      "title": "team_members",
+      "file": "resources/team_members.md",
+      "bytes": 2994
+    },
+    {
+      "id": "12886371",
+      "slug": "user_entitlement",
+      "category": "resources",
+      "subcategory": null,
+      "title": "user_entitlement",
+      "file": "resources/user_entitlement.md",
+      "bytes": 3000
+    },
+    {
+      "id": "12886372",
+      "slug": "variable_group",
+      "category": "resources",
+      "subcategory": null,
+      "title": "variable_group",
+      "file": "resources/variable_group.md",
+      "bytes": 5552
+    },
+    {
+      "id": "12886373",
+      "slug": "variable_group_permissions",
+      "category": "resources",
+      "subcategory": null,
+      "title": "variable_group_permissions",
+      "file": "resources/variable_group_permissions.md",
+      "bytes": 3239
+    },
+    {
+      "id": "12886374",
+      "slug": "variable_group_variable",
+      "category": "resources",
+      "subcategory": null,
+      "title": "variable_group_variable",
+      "file": "resources/variable_group_variable.md",
+      "bytes": 2937
+    },
+    {
+      "id": "12886375",
+      "slug": "wiki",
+      "category": "resources",
+      "subcategory": null,
+      "title": "wiki",
+      "file": "resources/wiki.md",
+      "bytes": 2419
+    },
+    {
+      "id": "12886376",
+      "slug": "wiki_page",
+      "category": "resources",
+      "subcategory": null,
+      "title": "wiki_page",
+      "file": "resources/wiki_page.md",
+      "bytes": 1780
+    },
+    {
+      "id": "12886377",
+      "slug": "workitem",
+      "category": "resources",
+      "subcategory": null,
+      "title": "workitem",
+      "file": "resources/workitem.md",
+      "bytes": 5724
+    },
+    {
+      "id": "12886378",
+      "slug": "workitemquery",
+      "category": "resources",
+      "subcategory": null,
+      "title": "workitemquery",
+      "file": "resources/workitemquery.md",
+      "bytes": 5300
+    },
+    {
+      "id": "12886379",
+      "slug": "workitemquery_folder",
+      "category": "resources",
+      "subcategory": null,
+      "title": "workitemquery_folder",
+      "file": "resources/workitemquery_folder.md",
+      "bytes": 2642
+    },
+    {
+      "id": "12886380",
+      "slug": "workitemquery_permissions",
+      "category": "resources",
+      "subcategory": null,
+      "title": "workitemquery_permissions",
+      "file": "resources/workitemquery_permissions.md",
+      "bytes": 5248
+    },
+    {
+      "id": "12886381",
+      "slug": "workitemtracking_field",
+      "category": "resources",
+      "subcategory": null,
+      "title": "workitemtracking_field",
+      "file": "resources/workitemtracking_field.md",
+      "bytes": 4042
+    },
+    {
+      "id": "12886382",
+      "slug": "workitemtrackingprocess_control",
+      "category": "resources",
+      "subcategory": null,
+      "title": "workitemtrackingprocess_control",
+      "file": "resources/workitemtrackingprocess_control.md",
+      "bytes": 6401
+    },
+    {
+      "id": "12886383",
+      "slug": "workitemtrackingprocess_field",
+      "category": "resources",
+      "subcategory": null,
+      "title": "workitemtrackingprocess_field",
+      "file": "resources/workitemtrackingprocess_field.md",
+      "bytes": 3732
+    },
+    {
+      "id": "12886384",
+      "slug": "workitemtrackingprocess_group",
+      "category": "resources",
+      "subcategory": null,
+      "title": "workitemtrackingprocess_group",
+      "file": "resources/workitemtrackingprocess_group.md",
+      "bytes": 7098
+    },
+    {
+      "id": "12886385",
+      "slug": "workitemtrackingprocess_inherited_control",
+      "category": "resources",
+      "subcategory": null,
+      "title": "workitemtrackingprocess_inherited_control",
+      "file": "resources/workitemtrackingprocess_inherited_control.md",
+      "bytes": 3436
+    },
+    {
+      "id": "12886386",
+      "slug": "workitemtrackingprocess_inherited_page",
+      "category": "resources",
+      "subcategory": null,
+      "title": "workitemtrackingprocess_inherited_page",
+      "file": "resources/workitemtrackingprocess_inherited_page.md",
+      "bytes": 2858
+    },
+    {
+      "id": "12886387",
+      "slug": "workitemtrackingprocess_inherited_state",
+      "category": "resources",
+      "subcategory": null,
+      "title": "workitemtrackingprocess_inherited_state",
+      "file": "resources/workitemtrackingprocess_inherited_state.md",
+      "bytes": 2970
+    },
+    {
+      "id": "12886388",
+      "slug": "workitemtrackingprocess_list",
+      "category": "resources",
+      "subcategory": null,
+      "title": "workitemtrackingprocess_list",
+      "file": "resources/workitemtrackingprocess_list.md",
+      "bytes": 2199
+    },
+    {
+      "id": "12886389",
+      "slug": "workitemtrackingprocess_page",
+      "category": "resources",
+      "subcategory": null,
+      "title": "workitemtrackingprocess_page",
+      "file": "resources/workitemtrackingprocess_page.md",
+      "bytes": 2633
+    },
+    {
+      "id": "12886390",
+      "slug": "workitemtrackingprocess_process",
+      "category": "resources",
+      "subcategory": null,
+      "title": "workitemtrackingprocess_process",
+      "file": "resources/workitemtrackingprocess_process.md",
+      "bytes": 2196
+    },
+    {
+      "id": "12886391",
+      "slug": "workitemtrackingprocess_process_permissions",
+      "category": "resources",
+      "subcategory": null,
+      "title": "workitemtrackingprocess_process_permissions",
+      "file": "resources/workitemtrackingprocess_process_permissions.md",
+      "bytes": 3247
+    },
+    {
+      "id": "12886392",
+      "slug": "workitemtrackingprocess_rule",
+      "category": "resources",
+      "subcategory": null,
+      "title": "workitemtrackingprocess_rule",
+      "file": "resources/workitemtrackingprocess_rule.md",
+      "bytes": 6445
+    },
+    {
+      "id": "12886393",
+      "slug": "workitemtrackingprocess_state",
+      "category": "resources",
+      "subcategory": null,
+      "title": "workitemtrackingprocess_state",
+      "file": "resources/workitemtrackingprocess_state.md",
+      "bytes": 2725
+    },
+    {
+      "id": "12886394",
+      "slug": "workitemtrackingprocess_system_control",
+      "category": "resources",
+      "subcategory": null,
+      "title": "workitemtrackingprocess_system_control",
+      "file": "resources/workitemtrackingprocess_system_control.md",
+      "bytes": 3273
+    },
+    {
+      "id": "12886395",
+      "slug": "workitemtrackingprocess_workitemtype",
+      "category": "resources",
+      "subcategory": null,
+      "title": "workitemtrackingprocess_workitemtype",
+      "file": "resources/workitemtrackingprocess_workitemtype.md",
+      "bytes": 3279
+    }
+  ]
+}

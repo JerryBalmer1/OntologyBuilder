@@ -1,0 +1,105 @@
+/* Node context menu ---------------------------------------------------- */
+#node-menu {
+    position: fixed;
+    z-index: 50;
+    display: none;
+    min-width: 190px;
+    padding: 4px;
+    background: var(--panel-2);
+    border: 1px solid var(--line);
+    border-radius: 5px;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, .55);
+}
+#node-menu.open { display: block; }
+#node-menu .menu-title {
+    padding: 5px 9px 6px;
+    margin-bottom: 3px;
+    border-bottom: 1px solid var(--line);
+    color: var(--fg-dim);
+    font-size: 11px;
+    /* A long function name must not stretch the menu off-screen. */
+    max-width: 320px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+/* Anchors and buttons look identical: whether an action is a link is a
+   mechanism detail, not something the reader should have to notice. */
+#node-menu button,
+#node-menu a {
+    display: block;
+    width: 100%;
+    padding: 6px 9px;
+    background: transparent;
+    border: 0;
+    border-radius: 3px;
+    color: var(--fg);
+    text-align: left;
+    text-decoration: none;
+    font: inherit;
+    cursor: pointer;
+}
+#node-menu button:hover:not(:disabled),
+#node-menu a:hover,
+#node-menu button:focus-visible,
+#node-menu a:focus-visible { background: #2f3a4a; outline: none; }
+/* Disabled rather than hidden: an action that is missing looks like a bug,
+   an action that is greyed out with a reason explains itself. */
+#node-menu button:disabled { color: var(--fg-dim); cursor: default; }
+/* Info panel ----------------------------------------------------------- */
+#info-panel {
+    position: fixed;
+    z-index: 60;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    max-width: min(760px, 92vw);
+    max-height: 80vh;
+    display: flex;
+    flex-direction: column;
+    background: var(--panel-2);
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, .6);
+}
+#info-panel[hidden] { display: none; }
+.info-head {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 10px;
+    border-bottom: 1px solid var(--line);
+    font-size: 12px;
+    color: var(--fg-dim);
+}
+.info-head #info-title { margin-right: auto; }
+#info-rows {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 4px 12px;
+    margin: 0;
+    padding: 10px 12px;
+    font-size: 12px;
+}
+#info-rows[hidden] { display: none; }
+#info-rows dt { color: var(--fg-dim); }
+#info-rows dd { margin: 0; }
+#info-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    padding: 0 12px 10px;
+}
+#info-actions[hidden] { display: none; }
+#info-body[hidden] { display: none; }
+#info-body {
+    margin: 0;
+    padding: 10px 12px;
+    overflow: auto;
+    font-family: Consolas, "SF Mono", Menlo, monospace;
+    font-size: 11px;
+    line-height: 1.6;
+    white-space: pre-wrap;
+    word-break: break-all;
+    /* Selectable by design: this text exists to be copied out. */
+    user-select: text;
+}
