@@ -1,0 +1,5 @@
+# Build context is sources/terraform. Only main.tf and the export script are
+# needed; everything else is either gigabytes or noise.
+*
+!main.tf
+!Export-ProviderSchema.ps1
