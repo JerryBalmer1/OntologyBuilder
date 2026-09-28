@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ontology Builder — order of operations</title>
+<style>
+  :root {
+    --bg: #14181f; --panel: #1c2129; --panel2: #232a34; --panel3: #2a323d; --panel4: #313a46; --line: #2c333d; --line2: #3d4653;
+    --ink: #d9dde3; --dim: #8a929d; --warn: #e0705a;
+    /* controlled vocabulary — one colour per named container, used everywhere.
+       Stages take a tint of their pipeline's family so the family reads at a glance.
+       "operations" keeps the colour it has in ontology-layering-model.html. */
+    --c-onboarding: #e08a6a;
+    --c-provisioning: #f2a888;
+    --c-build-stage: #58b47a;      /* same container as the Build pipeline: a template reference */
+    --c-curation: #f0b8a0;
+    --c-commit: #f8cdb8;
+    --c-build: #58b47a;
+    --c-sources: #3f8f60;
+    --c-transform: #6fc98f;
+    --c-classify: #8ad4a6;
+    --c-publish: #b3e6c4;
+    --c-source-type: #9ad9b0;
+    --c-fallthrough: #5fc4c4;
+    --c-operations: #e6c85f;
+    --c-schema: #f0d88a;
+    --c-discovery: #b8a54a;
+    --c-registry: #d4bf6f;
+    --c-gates: #b48ce6;
+    --c-policies: #8fb2d9;
+    --c-artifacts: #c6a6d9;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; background: var(--bg); color: var(--ink); }
+  body { font: 15px/1.6 "IBM Plex Sans", "Segoe UI", system-ui, sans-serif; padding: 40px 24px 80px; }
+  main { max-width: 1160px; margin: 0 auto; }
+  h1 { font-size: 30px; font-weight: 600; margin: 0 0 6px; letter-spacing: -0.01em; }
+  h1 + p { color: var(--dim); margin: 0 0 24px; }
+  h2 { font-size: 20px; font-weight: 600; margin: 48px 0 12px; padding-top: 24px; border-top: 1px solid var(--line); }
+  p { margin: 0 0 12px; max-width: 76ch; }
+  code { font: 13px/1.5 "Cascadia Code", "JetBrains Mono", Consolas, monospace; background: #0f1319; padding: 1px 6px; border-radius: 3px; }
+  table { border-collapse: collapse; width: 100%; margin: 14px 0; font-size: 14px; }
+  th, td { text-align: left; padding: 9px 12px; border-bottom: 1px solid var(--line); vertical-align: top; }
+  th { color: var(--dim); font-weight: 500; }
+  ul { padding-left: 22px; } li { margin: 6px 0; }
+
+  .convention { border: 1px solid var(--line2); border-radius: 8px; background: var(--panel); padding: 14px 18px; margin: 0 0 8px; max-width: none; }
+  .convention b { display: block; margin-bottom: 4px; }
+  .convention p { max-width: none; margin: 0 0 8px; }
+  .convention table { margin: 8px 0 14px; }
+
+  .v { font-weight: 600; padding: 0 5px; border-radius: 3px; background: #0f1319; border: 1px solid; white-space: nowrap; }
+  .v-onboarding { color: var(--c-onboarding); border-color: var(--c-onboarding); }
+  .v-provisioning { color: var(--c-provisioning); border-color: var(--c-provisioning); }
+  .v-curation { color: var(--c-curation); border-color: var(--c-curation); }
+  .v-commit { color: var(--c-commit); border-color: var(--c-commit); }
+  .v-build { color: var(--c-build); border-color: var(--c-build); }
+  .v-sources { color: var(--c-sources); border-color: var(--c-sources); }
+  .v-transform { color: var(--c-transform); border-color: var(--c-transform); }
+  .v-classify { color: var(--c-classify); border-color: var(--c-classify); }
+  .v-publish { color: var(--c-publish); border-color: var(--c-publish); }
+  .v-source-type { color: var(--c-source-type); border-color: var(--c-source-type); }
+  .v-fallthrough { color: var(--c-fallthrough); border-color: var(--c-fallthrough); }
+  .v-operations { color: var(--c-operations); border-color: var(--c-operations); }
+  .v-schema { color: var(--c-schema); border-color: var(--c-schema); }
+  .v-discovery { color: var(--c-discovery); border-color: var(--c-discovery); }
+  .v-registry { color: var(--c-registry); border-color: var(--c-registry); }
+  .v-gates { color: var(--c-gates); border-color: var(--c-gates); }
+  .v-policies { color: var(--c-policies); border-color: var(--c-policies); }
+  .v-artifacts { color: var(--c-artifacts); border-color: var(--c-artifacts); }
+
+  .kind { font-size: 11px; font-weight: 500; text-transform: uppercase; letter-spacing: .06em; color: var(--dim); margin-left: 6px; }
+
+  .container { border: 1px solid; border-radius: 8px; background: var(--panel); padding: 12px; margin-top: 14px; }
+  .container > header { font-weight: 600; margin-bottom: 2px; }
+  .container > header small { display: block; color: var(--dim); font-weight: 400; font-size: 13px; }
+  .container > .order { color: var(--dim); font-size: 12px; margin-bottom: 10px; }
+  .container .container { background: var(--panel2); margin-top: 6px; }
+  .container .container .container { background: var(--panel3); }
+  .container .container .container .container { background: var(--panel4); }
+  [data-container="onboarding"] { border-color: var(--c-onboarding); } [data-container="onboarding"] > header { color: var(--c-onboarding); }
+  [data-container="provisioning"] { border-color: var(--c-provisioning); } [data-container="provisioning"] > header { color: var(--c-provisioning); }
+  [data-container="build-stage"] { border-color: var(--c-build-stage); } [data-container="build-stage"] > header { color: var(--c-build-stage); }
+  [data-container="curation"] { border-color: var(--c-curation); } [data-container="curation"] > header { color: var(--c-curation); }
+  [data-container="commit"] { border-color: var(--c-commit); } [data-container="commit"] > header { color: var(--c-commit); }
+  [data-container="build"] { border-color: var(--c-build); } [data-container="build"] > header { color: var(--c-build); }
+  [data-container="sources"] { border-color: var(--c-sources); } [data-container="sources"] > header { color: var(--c-sources); }
+  [data-container="transform"] { border-color: var(--c-transform); } [data-container="transform"] > header { color: var(--c-transform); }
+  [data-container="classify"] { border-color: var(--c-classify); } [data-container="classify"] > header { color: var(--c-classify); }
+  [data-container="publish"] { border-color: var(--c-publish); } [data-container="publish"] > header { color: var(--c-publish); }
+  [data-container="source-type"] { border-color: var(--c-source-type); } [data-container="source-type"] > header { color: var(--c-source-type); }
+  [data-container="fallthrough"] { border-color: var(--c-fallthrough); } [data-container="fallthrough"] > header { color: var(--c-fallthrough); }
+  [data-container="operations"] { border-color: var(--c-operations); } [data-container="operations"] > header { color: var(--c-operations); }
+  [data-container="schema"] { border-color: var(--c-schema); } [data-container="schema"] > header { color: var(--c-schema); }
+  [data-container="discovery"] { border-color: var(--c-discovery); } [data-container="discovery"] > header { color: var(--c-discovery); }
+  [data-container="registry"] { border-color: var(--c-registry); } [data-container="registry"] > header { color: var(--c-registry); }
+  [data-container="gates"] { border-color: var(--c-gates); } [data-container="gates"] > header { color: var(--c-gates); }
+  [data-container="policies"] { border-color: var(--c-policies); } [data-container="policies"] > header { color: var(--c-policies); }
+  [data-container="artifacts"] { border-color: var(--c-artifacts); } [data-container="artifacts"] > header { color: var(--c-artifacts); }
+
+  .box { border: 1px solid var(--line); border-radius: 5px; padding: 8px 10px; margin-top: 6px; background: var(--bg); }
+  .box b { display: block; }
+  .box small { display: block; color: var(--dim); font-size: 12.5px; line-height: 1.45; }
+  .box[data-ground="true"] { border-color: var(--ink); border-width: 2px; }
+  .box[data-status="deferred"], .container[data-status="deferred"] { opacity: .55; }
+  .gate { color: var(--c-gates); font-size: 12px; text-align: center; padding: 4px 0 0; }
+  .gate::before { content: "▲ gate: "; }
+  .gate.approval::before { content: "▲ approval: "; }
+  .gate.contract { font-weight: 600; }
+  .gate.contract::before { content: "▲ contract: "; }
+
+  .seq { display: grid; grid-template-columns: 1.1fr 1.1fr 0.9fr; gap: 18px; margin: 16px 0 8px; align-items: end; }
+  .seq > .container { margin-top: 0; }
+  .seq-order { color: var(--dim); font-size: 12px; display: grid; grid-template-columns: 1.1fr 1.1fr 0.9fr; gap: 18px; text-align: center; }
+  .two { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; align-items: start; }
+  .two > .container { margin-top: 0; }
+  @media (max-width: 900px) { .seq, .two, .seq-order { grid-template-columns: 1fr; align-items: stretch; } }
+</style>
+</head>
+<body>
+<main>
+
+<h1>Order of operations</h1>
+<p>Ontology Builder — the pipeline definition. Companion to <code>ontology-layering-model.html</code>. That page says what the model <em>is</em>; this page says the sequence in which it gets built, per company, per run, every time. Human-readable here; machine-readable in the JSON block at the end of the file — and, because the vocabulary is the one CI systems already use, emittable as a pipeline YAML without translation.</p>
+
+<div class="convention" data-role="convention">
+  <b>How to read this document</b>
+  <p>Same conventions as the layering page. Every named container has one colour, used wherever that container is mentioned. Every container is <strong>bottom-up</strong>: the first item sits at the <em>bottom</em> and later items rest on it. The three pipelines read <strong>left to right</strong>, and each one contains or produces the next. Names are industry-standard, never invented: someone who has built a CI pipeline before should recognise every word here on sight.</p>
+
+  <b>Kinds — the page has two halves, and both are standard</b>
+  <p>The <strong>sequence half</strong> uses the vocabulary of a pipeline definition (Azure DevOps, GitHub Actions, GitLab — same words everywhere). The <strong>declarative half</strong> uses the vocabulary that sits <em>beside</em> a pipeline definition rather than inside it. Neither half is weaker; they are different kinds, and a reader who knows one already knows the other.</p>
+  <table>
+    <tr><th>Kind</th><th>Half</th><th>Meaning here</th><th>Rendered as</th></tr>
+    <tr><td><strong>pipeline</strong></td><td>sequence</td><td>A complete ordered run with its own cadence and trigger. Three on this page.</td><td>outer container, one column each</td></tr>
+    <tr><td><strong>stage</strong></td><td>sequence</td><td>A named ordered group inside a pipeline. Stages run in order; every step lives in exactly one stage.</td><td>bordered sub-container, tinted to its pipeline's family</td></tr>
+    <tr><td><strong>job</strong></td><td>sequence</td><td>A parallel sibling inside a stage. Jobs are not alternatives: every job the company has runs; the ones with nothing behind them are skipped. Source types are jobs.</td><td>sub-container inside a stage</td></tr>
+    <tr><td><strong>step</strong></td><td>sequence</td><td>One unit of work. Reads one artifact, writes one artifact.</td><td>numbered box</td></tr>
+    <tr><td><strong>gate</strong></td><td>declarative</td><td>A condition or approval between steps or stages. Conditions are predicates the build checks; approvals are the human-in-the-loop variety.</td><td>▲ line between boxes; rules in the Gates container</td></tr>
+    <tr><td><strong>policy</strong></td><td>declarative</td><td>A constraint that is true regardless of sequence. Branch policies and pipeline policies are the familiar form.</td><td>Policies container</td></tr>
+    <tr><td><strong>artifact</strong></td><td>declarative</td><td>A published file that steps communicate through. The only thing that crosses a stage boundary.</td><td>Artifacts container, read/write table</td></tr>
+  </table>
+
+  <b>Vocabulary — every container, what it means, who owns it</b>
+  <table>
+    <tr><th>Container</th><th>Kind</th><th>Meaning</th><th>Cadence</th><th>Responsibility</th></tr>
+    <tr><td><span class="v v-onboarding">onboarding</span></td><td>pipeline</td><td>The per-company loop. Select what to model, build, curate what came back, commit.</td><td>per company</td><td>Human triggers; agent runs everything but curation</td></tr>
+    <tr><td><span class="v v-provisioning">provisioning</span></td><td>stage</td><td>Choosing and pinning providers. Everything the build needs before it can run.</td><td>per company</td><td>Human chooses; agent pins</td></tr>
+    <tr><td><span class="v v-build">build</span></td><td>pipeline, referenced as a stage</td><td>The per-run build: sources, transform, classify, publish. Deterministic, gated, no human input. Onboarding invokes it as a template — same container, same colour.</td><td>per run</td><td>Build (<code>Invoke-Build</code>); agent triggers, never edits mid-run</td></tr>
+    <tr><td><span class="v v-curation">curation</span></td><td>stage, behind an approval</td><td>Human-in-the-loop review of unclassified types and promotion of decisions into config. The only place judgement enters.</td><td>per company</td><td>Human decides; agent records</td></tr>
+    <tr><td><span class="v v-commit">commit</span></td><td>stage</td><td>Config and outputs land as one commit. The next company starts from a smarter config than this one did.</td><td>per company</td><td>Agent</td></tr>
+    <tr><td><span class="v v-sources">sources</span></td><td>stage</td><td>Acquisition. Where raw type information comes from. Asks config which source types this company has and fans out over all of them in parallel.</td><td>per run</td><td>Build</td></tr>
+    <tr><td><span class="v v-source-type">source type</span></td><td>job</td><td>One kind of place type information (or instances) comes from: <code>source_type.terraform</code>, <code>source_type.openapi</code>, <code>source_type.cli</code>. A node type in the ontology, not an implementation choice. Every source type present runs; all return the same shape. The script behind one is its <em>adapter</em>.</td><td>per run, per source type present</td><td>Build; declaring a source type is config, its adapter is engineering</td></tr>
+    <tr><td><span class="v v-transform">transform</span></td><td>stage</td><td>Source-type output becomes structure: flatten mints ids, links draws edges. Pure, provider-agnostic, touches no config.</td><td>per run</td><td>Build</td></tr>
+    <tr><td><span class="v v-classify">classify</span></td><td>stage</td><td>Every type id gets a classification. Runs the fallthrough job once per id.</td><td>per run</td><td>Build; rules in config</td></tr>
+    <tr><td><span class="v v-fallthrough">fallthrough</span></td><td>job</td><td>How one type id gets its layer. Cheapest, most certain path first. The tier recorded is which rung caught it.</td><td>per type id</td><td>Build</td></tr>
+    <tr><td><span class="v v-publish">publish</span></td><td>stage</td><td>Assemble the graph and render it. Presentation only; nothing here feeds back down.</td><td>per run</td><td>Build</td></tr>
+    <tr><td><span class="v v-operations">operations</span></td><td>pipeline</td><td>The structural sequence: types exist before instances, instances before skills. Same container as on the layering page.</td><td>structural</td><td>Architecture; violating it is a design error</td></tr>
+    <tr><td><span class="v v-schema">schema</span></td><td>stage</td><td>The types. Produced by <span class="v v-build">build</span>; frozen from here.</td><td>structural</td><td>Build</td></tr>
+    <tr><td><span class="v v-discovery">discovery</span></td><td>stage</td><td>Enumerating live instances. Same fan-out over source types as <span class="v v-sources">sources</span>, one rung up. <code>source_type.az_devops</code> first.</td><td>per estate</td><td>Agent, read-only</td></tr>
+    <tr><td><span class="v v-registry">registry</span></td><td>stage</td><td>Which skill may act on which type with which verb. No registration → refuse.</td><td>structural</td><td>Architecture</td></tr>
+    <tr><td><span class="v v-gates">gates</span></td><td>declarative</td><td>Conditions and approvals. Checked between every step. Failure stops.</td><td>cross-cutting</td><td>Build checks conditions; humans give approvals</td></tr>
+    <tr><td><span class="v v-policies">policies</span></td><td>declarative</td><td>Constraints true before, during and after every pipeline. Never sequenced.</td><td>cross-cutting</td><td>Everyone; the agent checks, the human enforces</td></tr>
+    <tr><td><span class="v v-artifacts">artifacts</span></td><td>declarative</td><td>The published files stages communicate through. No step reads another's memory.</td><td>cross-cutting</td><td>Build writes; everyone reads</td></tr>
+  </table>
+</div>
+
+<h2>The three pipelines</h2>
+<p>Three pipelines at three cadences, read left to right. <span class="v v-onboarding">Onboarding</span> runs once per company and invokes <span class="v v-build">Build</span> as its second stage. <span class="v v-build">Build</span> runs on every trigger and its published output is the ground stage of <span class="v v-operations">Operations</span>, which is structural and runs once per estate. Every step sits inside a stage; every parallel sibling inside a stage is a job.</p>
+
+<div class="seq-order"><div>① per company</div><div>② per run — invoked by ①</div><div>③ structural — produced by ②</div></div>
+<div class="seq">
+
+  <section class="container" data-container="onboarding" data-kind="pipeline" data-direction="bottom-up" data-cadence="per-company" data-sequence="1">
+    <header>Onboarding <span class="kind">pipeline</span><small>Per company. Same stages every time; only the mappings grow.</small></header>
+    <div class="order">read bottom to top</div>
+
+    <section class="container" data-container="commit" data-kind="stage" data-direction="bottom-up">
+      <header>Commit <span class="kind">stage</span></header>
+      <div class="box" data-member="commit" data-order="6">
+        <b>6 · Commit</b>
+        <small>Config and outputs land in one commit. The next company starts from a smarter <code>layers.yaml</code> than this one did.</small>
+      </div>
+    </section>
+    <div class="gate">nothing left in the unclassified list, or every remainder has a written reason</div>
+
+    <section class="container" data-container="curation" data-kind="stage" data-direction="bottom-up" data-owner="human">
+      <header>Curation <span class="kind">stage · approval</span><small>Human in the loop. Steps 4–5.</small></header>
+      <div class="box" data-member="promote" data-order="5">
+        <b>5 · Promote</b>
+        <small>Each confirmed edge case becomes an explicit type-id → layer line in <code>layers.yaml</code>. Tier 3 guess becomes tier 1 fact.</small>
+      </div>
+      <div class="gate approval">each unclassified type has a human decision attached</div>
+      <div class="box" data-member="review" data-order="4">
+        <b>4 · Review</b>
+        <small>Look only at what fell through. Nothing tier 1 gets re-argued. Decide layer, role, and whether the keyword rule that missed needs tuning.</small>
+      </div>
+    </section>
+    <div class="gate">build completed and published an unclassified list</div>
+
+    <section class="container" data-container="build-stage" data-kind="stage" data-template="build">
+      <header>Build <span class="kind">stage · template: build</span><small>Invokes pipeline ②. Same container, same colour.</small></header>
+      <div class="box" data-member="run-build" data-order="3">
+        <b>3 · Run <span class="v v-build">build</span></b>
+        <small>Sources through publish. The whole inner pipeline, once.</small>
+      </div>
+    </section>
+    <div class="gate">provider versions pinned; init succeeded</div>
+
+    <section class="container" data-container="provisioning" data-kind="stage" data-direction="bottom-up">
+      <header>Provisioning <span class="kind">stage</span><small>Steps 1–2. What the build needs before it can run.</small></header>
+      <div class="box" data-member="pin" data-order="2">
+        <b>2 · Pin</b>
+        <small>Every selected provider gets <code>~&gt; MAJOR.0</code>. <code>terraform init</code> once. Schema is reproducible or it isn't a schema.</small>
+      </div>
+      <div class="gate">selected set written to <code>sources.json</code></div>
+      <div class="box" data-member="select" data-order="1" data-ground="true">
+        <b>1 · Select providers</b>
+        <small>Only what the company actually runs. Azure + Azure DevOps at one shop, AWS + something else at the next. Never "every provider known to man".</small>
+      </div>
+    </section>
+  </section>
+
+  <section class="container" data-container="build" data-kind="pipeline" data-direction="bottom-up" data-cadence="per-run" data-sequence="2">
+    <header>Build <span class="kind">pipeline</span><small>Per run. Each stage reads only the artifact published below it.</small></header>
+    <div class="order">read bottom to top</div>
+
+    <section class="container" data-container="publish" data-kind="stage" data-direction="bottom-up">
+      <header>Publish <span class="kind">stage</span><small>Steps 6–7. Assemble and render.</small></header>
+      <div class="box" data-member="render" data-order="7">
+        <b>7 · Render</b>
+        <small>PSGraphRender → <code>graph.html</code>. Presentation only; nothing here feeds back down.</small>
+      </div>
+      <div class="gate"><code>graph.json</code> validates against contract 1.1.0</div>
+      <div class="box" data-member="graph" data-order="6">
+        <b>6 · Graph</b>
+        <small>Nodes carry a property bag (classification + tier + existence). <code>contained_by</code> and <code>references</code> are edges. Emits the facets block.</small>
+      </div>
+    </section>
+    <div class="gate">every node has a classification entry, even if the value is <code>unclassified</code></div>
+
+    <section class="container" data-container="classify" data-kind="stage" data-direction="bottom-up">
+      <header>Classify <span class="kind">stage</span><small>Step 5. One job: the fallthrough, run per type id.</small></header>
+      <section class="container" data-container="fallthrough" data-kind="job" data-status="active">
+        <header>Job · Fallthrough <small>Detailed below. A learned classifier would be a second job here, running alongside, not instead.</small></header>
+        <div class="box" data-member="classify" data-order="5">
+          <b>5 · Classify</b>
+          <small>Runs the <span class="v v-fallthrough">fallthrough</span> per type id. Writes <code>categories.json</code> plus the unclassified list that <span class="v v-curation">curation</span> reads.</small>
+        </div>
+      </section>
+    </section>
+    <div class="gate">every type id in <code>links.json</code> exists in <code>types.json</code></div>
+
+    <section class="container" data-container="transform" data-kind="stage" data-direction="bottom-up">
+      <header>Transform <span class="kind">stage</span><small>Steps 3–4. Pure. Provider-agnostic. Touches no config.</small></header>
+      <div class="box" data-member="links" data-order="4">
+        <b>4 · Links</b>
+        <small>Cross-references between types, containment chains from CLI command trees. <code>links.json</code>.</small>
+      </div>
+      <div class="gate">type ids namespaced and unique</div>
+      <div class="box" data-member="flatten" data-order="3">
+        <b>3 · Flatten</b>
+        <small>Adapter output → one row per type. Recursive types collapsed to self-reference. <code>types.json</code>. This step <em>mints</em> ids.</small>
+      </div>
+    </section>
+    <div class="gate contract">every source type returns the same shape — raw type records with a provider namespace. This is the line every source type's adapter is written to.</div>
+
+    <section class="container" data-container="sources" data-kind="stage" data-direction="bottom-up">
+      <header>Sources <span class="kind">stage</span><small>Acquisition. Steps 1–2. One job per source type; all present source types run in parallel, absent ones are skipped.</small></header>
+
+      <section class="container" data-container="source-type" data-kind="job" data-type-id="source_type.openapi" data-source-type="openapi" data-status="deferred">
+        <header>Source type · OpenAPI / REST <small><code>source_type.openapi</code>. Deferred. Runs alongside Terraform where a spec exists.</small></header>
+        <div class="box" data-member="fetch-spec" data-order="1" data-status="deferred"><b>1 · Fetch spec</b><small>Pull the OpenAPI document; resources are its schemas, verbs are its paths.</small></div>
+      </section>
+
+      <section class="container" data-container="source-type" data-kind="job" data-type-id="source_type.cli" data-source-type="cli" data-status="deferred">
+        <header>Source type · CLI introspection <small><code>source_type.cli</code>. Deferred. Command tree as hierarchy evidence.</small></header>
+        <div class="box" data-member="walk-commands" data-order="1" data-status="deferred"><b>1 · Walk commands</b><small>Required parameters are the parent path. Tier 2 signal for <span class="v v-fallthrough">fallthrough</span>.</small></div>
+      </section>
+
+      <section class="container" data-container="source-type" data-kind="job" data-type-id="source_type.terraform" data-source-type="terraform" data-status="active">
+        <header>Source type · Terraform <small><code>source_type.terraform</code>. Active. The only source type with an adapter today.</small></header>
+        <div class="box" data-member="docs" data-order="2">
+          <b>2 · Docs</b>
+          <small>Registry documentation per resource: descriptions, and later the REST URLs that give the imperative verbs the declarative schema lacks.</small>
+        </div>
+        <div class="gate">raw schema on disk under <code>sources/terraform/out/</code></div>
+        <div class="box" data-member="harvest" data-order="1" data-ground="true">
+          <b>1 · Harvest</b>
+          <small><code>terraform providers schema -json</code> for the pinned set. Read-only. Cacheable. Knowledge, not engagement.</small>
+        </div>
+      </section>
+    </section>
+  </section>
+
+  <section class="container" data-container="operations" data-kind="pipeline" data-direction="bottom-up" data-cadence="structural" data-sequence="3">
+    <header>Operations <span class="kind">pipeline</span><small>Structural. Same container as on the layering page.</small></header>
+    <div class="order">read bottom to top</div>
+
+    <section class="container" data-container="registry" data-kind="stage" data-status="deferred">
+      <header>Registry <span class="kind">stage</span><small>Step 3. Deferred.</small></header>
+      <div class="box" data-member="skills" data-order="3" data-status="deferred">
+        <b>3 · Skills</b>
+        <small>Which skill may act on which type id with which verb. Registers against ids that already exist. No registration → the agent refuses. The refusal is the product.</small>
+      </div>
+    </section>
+    <div class="gate">instances resolve to a type id; no orphan resources</div>
+
+    <section class="container" data-container="discovery" data-kind="stage" data-direction="bottom-up" data-status="deferred">
+      <header>Discovery <span class="kind">stage</span><small>Step 2. One job per source type — same fan-out as <span class="v v-sources">sources</span>.</small></header>
+      <section class="container" data-container="source-type" data-kind="job" data-type-id="source_type.az_devops" data-source-type="az-devops" data-status="deferred">
+        <header>Source type · Azure DevOps <small><code>source_type.az_devops</code>. First test bed. Free tier, real hierarchy.</small></header>
+        <div class="box" data-member="instances" data-order="2" data-status="deferred">
+          <b>2 · Instances</b>
+          <small>Walk organisation → project → repo → pipeline via <code>az devops</code>. Every live resource resolves to a minted type id or it is an error, not a new type.</small>
+        </div>
+      </section>
+    </section>
+    <div class="gate">type ids exist and are frozen</div>
+
+    <section class="container" data-container="schema" data-kind="stage">
+      <header>Schema <span class="kind">stage</span><small>Step 1. Published by <span class="v v-build">build</span>.</small></header>
+      <div class="box" data-member="types" data-order="1" data-ground="true">
+        <b>1 · Types</b>
+        <small>The <span class="v v-build">build</span> pipeline publishes these. Everything above resolves to them. Their ids never change after this point.</small>
+      </div>
+    </section>
+  </section>
+
+</div>
+
+<h2>The fallthrough job</h2>
+<p>How one type id gets its layer. Cheapest, most certain path first; the tier recorded on the node is simply which rung caught it. This is the single job inside the <span class="v v-classify">classify</span> stage, and what <span class="v v-curation">curation</span> feeds.</p>
+
+<div class="two">
+  <section class="container" data-container="fallthrough" data-kind="job" data-direction="bottom-up">
+    <header>Fallthrough <span class="kind">job</span><small>One type id in, one classification out.</small></header>
+    <div class="order">read bottom to top — first match wins</div>
+
+    <div class="box" data-member="unclassified" data-order="4" data-tier="none">
+      <b>4 · Unclassified</b>
+      <small>No rule matched. Written to the review list. Layer value is literally <code>unclassified</code> — never blank, never guessed.</small>
+    </div>
+    <div class="gate">no keyword rule matched</div>
+
+    <div class="box" data-member="keyword" data-order="3" data-tier="3">
+      <b>3 · Keyword rules — tier 3</b>
+      <small>Name and description heuristics from <code>Get-CategoryRuleSet</code> (moving to config). Loud, cheap, wrong sometimes.</small>
+    </div>
+    <div class="gate">no structural signal</div>
+
+    <div class="box" data-member="structural" data-order="2" data-tier="2">
+      <b>2 · Structural signal — tier 2</b>
+      <small>Provider namespace, CLI command tree position, required parent parameters. Fed by <code>source_type.cli</code> once its adapter exists.</small>
+    </div>
+    <div class="gate">no explicit entry</div>
+
+    <div class="box" data-member="explicit" data-order="1" data-tier="1" data-ground="true">
+      <b>1 · Explicit lookup — tier 1</b>
+      <small><code>layers.yaml</code> / <code>roles.yaml</code>. Seeded with the priors every cloud shares: networking, storage, compute, identity. Grows by <span class="v v-curation">curation</span>, never by inference.</small>
+    </div>
+  </section>
+
+  <section class="container" data-container="gates" data-kind="declarative">
+    <header>Gates <span class="kind">conditions &amp; approvals</span><small>What every ▲ on this page has in common.</small></header>
+    <ul>
+      <li>A <strong>condition</strong> is a predicate over an artifact, not a feeling. "types.json has N rows and all ids are unique" is a condition; "looks fine" is not.</li>
+      <li>An <strong>approval</strong> is a condition a human satisfies. There is exactly one on this page: <span class="v v-curation">curation</span>. Everything else is checked by the build.</li>
+      <li>A failed gate <strong>stops</strong>. The agent reports which gate and which artifact, and does not proceed.</li>
+      <li>Conditions are checked by <code>Invoke-Build</code>, not by reading <code>out/</code> manually. The agent never reads <code>out/</code>.</li>
+      <li>Gates never mutate. Checking a gate is knowledge work; it touches nothing live.</li>
+      <li>A gate that keeps failing for a good reason gets a written exception in config, not a bypass in code.</li>
+      <li>The gate between <span class="v v-sources">sources</span> and <span class="v v-transform">transform</span> is special: it is the <strong>contract</strong> every <span class="v v-source-type">source type</span>'s adapter implements. Adding a source type means declaring it in config and satisfying that gate; nothing above sources changes.</li>
+    </ul>
+  </section>
+</div>
+
+<h2>Policies and artifacts</h2>
+
+<div class="two">
+  <section class="container" data-container="policies" data-kind="declarative">
+    <header>Policies <span class="kind">constraints</span><small>True before, during and after every pipeline on this page.</small></header>
+    <ul>
+      <li>Type ids, once minted, <strong>never change</strong>. Namespaced by provider. Renaming is a breaking change to the registry.</li>
+      <li>Layer names never change. Only the type-id mappings inside them grow. That is what makes <code>layers.yaml</code> portable between companies.</li>
+      <li>Classification is a <strong>property bag</strong> on the node, tiered. Nothing reads <code>layer</code> or <code>role</code> as a fixed field by name.</li>
+      <li>Hierarchy is an <strong>edge</strong>. <code>contained_by</code> alongside <code>references</code>; <code>owned_by</code> and <code>depends_on</code> slot in later without a refactor.</li>
+      <li>Existence tier is separate from label tier. Schema-mandated is certain; monitoring-implied is inferred.</li>
+      <li>Every <span class="v v-source-type">source type</span> returns the same shape. Nothing above <span class="v v-sources">sources</span> knows which ones ran.</li>
+      <li>Every step lives in exactly one stage. A step with no stage is a design error, not a shortcut.</li>
+      <li>Source types are node types. <code>source_type.*</code> ids live in the same ontology as the resources they produce; the pipeline reads its own vocabulary from the graph.</li>
+      <li>Knowledge before engagement. Nothing below <span class="v v-discovery">discovery</span> touches a live system; discovery itself is read-only.</li>
+      <li>PowerShell 7.4+, one script per source, StrictMode Latest, <code>System.Text.Json</code>. Whole files, same filename.</li>
+    </ul>
+  </section>
+
+  <section class="container" data-container="artifacts" data-kind="declarative">
+    <header>Artifacts <span class="kind">published</span><small>What each stage reads and writes. Named by stage · step.</small></header>
+    <table>
+      <tr><th>File</th><th>Written by</th><th>Read by</th></tr>
+      <tr><td><code>config/sources.json</code></td><td><span class="v v-provisioning">provisioning</span> 1</td><td><span class="v v-sources">sources</span></td></tr>
+      <tr><td><code>config/layers.yaml</code>, <code>roles.yaml</code></td><td><span class="v v-curation">curation</span> 5</td><td><span class="v v-fallthrough">fallthrough</span> 1</td></tr>
+      <tr><td>raw schema (<code>out/</code>)</td><td><span class="v v-source-type">source type</span> terraform 1</td><td><span class="v v-source-type">source type</span> terraform 2</td></tr>
+      <tr><td><code>types.json</code></td><td><span class="v v-transform">transform</span> 3</td><td><span class="v v-transform">transform</span> 4, <span class="v v-classify">classify</span> 5, <span class="v v-publish">publish</span> 6, <span class="v v-discovery">discovery</span>, <span class="v v-registry">registry</span></td></tr>
+      <tr><td><code>links.json</code></td><td><span class="v v-transform">transform</span> 4</td><td><span class="v v-publish">publish</span> 6</td></tr>
+      <tr><td><code>categories.json</code></td><td><span class="v v-classify">classify</span> 5</td><td><span class="v v-publish">publish</span> 6</td></tr>
+      <tr><td>unclassified list</td><td><span class="v v-classify">classify</span> 5</td><td><span class="v v-curation">curation</span> 4</td></tr>
+      <tr><td><code>graph.json</code></td><td><span class="v v-publish">publish</span> 6</td><td><span class="v v-publish">publish</span> 7</td></tr>
+      <tr><td><code>graph.html</code></td><td><span class="v v-publish">publish</span> 7</td><td>humans</td></tr>
+      <tr><td>skill registry <em>(deferred)</em></td><td><span class="v v-registry">registry</span> 3</td><td>the agent, at action time</td></tr>
+    </table>
+  </section>
+</div>
+
+<h2>How the containers connect</h2>
+<table>
+  <tr><th>From</th><th>Relation</th><th>To</th><th>Meaning</th></tr>
+  <tr><td><span class="v v-onboarding">onboarding</span></td><td>contains</td><td><span class="v v-provisioning">provisioning</span>, <span class="v v-curation">curation</span>, <span class="v v-commit">commit</span></td><td>Its own stages.</td></tr>
+  <tr><td><span class="v v-onboarding">onboarding</span></td><td>invokes</td><td><span class="v v-build">build</span></td><td>Stage 2 is a template reference to pipeline ②. One container, referenced from two places.</td></tr>
+  <tr><td><span class="v v-build">build</span></td><td>contains</td><td><span class="v v-sources">sources</span>, <span class="v v-transform">transform</span>, <span class="v v-classify">classify</span>, <span class="v v-publish">publish</span></td><td>Four stages, in that order.</td></tr>
+  <tr><td><span class="v v-sources">sources</span></td><td>fans out over</td><td><span class="v v-source-type">source type</span> ×N</td><td>Parallel, not pick-one. Every source type the company has runs. Terraform active; OpenAPI and CLI deferred.</td></tr>
+  <tr><td><span class="v v-classify">classify</span></td><td>contains</td><td><span class="v v-fallthrough">fallthrough</span></td><td>One job today. A second classifier would be a sibling job, same stage.</td></tr>
+  <tr><td><span class="v v-build">build</span></td><td>publishes</td><td><span class="v v-schema">schema</span></td><td>The build's output <em>is</em> the ground stage of operations.</td></tr>
+  <tr><td><span class="v v-operations">operations</span></td><td>contains</td><td><span class="v v-schema">schema</span>, <span class="v v-discovery">discovery</span>, <span class="v v-registry">registry</span></td><td>Its own stages.</td></tr>
+  <tr><td><span class="v v-discovery">discovery</span></td><td>fans out over</td><td><span class="v v-source-type">source type</span> ×N</td><td>Same parallel fan-out as sources. Azure DevOps first.</td></tr>
+  <tr><td><span class="v v-curation">curation</span></td><td>feeds</td><td><span class="v v-fallthrough">fallthrough</span></td><td>Promotion writes the file that fallthrough step 1 reads. The loop closes here.</td></tr>
+  <tr><td><span class="v v-gates">gates</span></td><td>gates</td><td>every pipeline</td><td>Each ▲ on the page is an instance of the gates container.</td></tr>
+  <tr><td><span class="v v-policies">policies</span></td><td>constrains</td><td>every pipeline</td><td>Never sequenced; always true.</td></tr>
+  <tr><td><span class="v v-artifacts">artifacts</span></td><td>carries</td><td>every pipeline</td><td>Stages only communicate through published files.</td></tr>
+  <tr><td>this page</td><td>depends_on</td><td><code>ontology-layering-model.html</code></td><td>The vocabulary (layers, rungs, tiers, dimensions) is defined there and only used here.</td></tr>
+</table>
+
+<h2>Still open</h2>
+<ul>
+  <li>Pipeline ② was called <em>Pipeline</em>; renamed <em>Build</em> here because every column is a pipeline and <code>Invoke-Build</code> is the tool. Earlier notes and <code>CLAUDE.md</code> still say pipeline.</li>
+  <li>Whether this JSON should be emitted as an actual pipeline YAML by the build, so the agent reads the same definition the CI system would.</li>
+  <li>Whether <span class="v v-provisioning">provisioning</span> step 2 (pin + init) should be a per-provider directory per the manifest idea, or one root init.</li>
+  <li>Where the unclassified list lives — inside <code>categories.json</code> or its own file. Leaning own file so review tooling has one input.</li>
+  <li>The exact shape of the <span class="v v-source-type">source type</span> contract. It must be written down before a second adapter is attempted.</li>
+  <li>Whether <span class="v v-fallthrough">fallthrough</span> step 2 (structural signal) is worth its own tier or collapses into tier 3 until the CLI adapter exists.</li>
+  <li>The gate between <span class="v v-discovery">discovery</span> and <span class="v v-registry">registry</span> assumes discovery is complete. It won't be. Need a partial-inventory policy.</li>
+  <li>Name collision: the layering page's <em>Storage</em> container (how facts are written) vs the <em>storage</em> infrastructure layer. Rename the container to Persistence.</li>
+</ul>
+
+<script type="application/json" id="model">
+{
+  "document": "ontology-order-of-operations",
+  "companion": "ontology-layering-model.html",
+  "convention": { "direction": "bottom-up", "pipelines": "left-to-right", "gate": "predicate over an artifact; failure stops", "naming": "industry-standard terms only" },
+  "kinds": {
+    "sequence":    ["pipeline", "stage", "job", "step"],
+    "declarative": ["gate", "policy", "artifact"]
+  },
+  "vocabulary": [
+    { "id": "onboarding",   "kind": "pipeline", "meaning": "per-company loop: provisioning, build, curation, commit", "cadence": "per-company", "owner": "human triggers; agent runs all but curation" },
+    { "id": "provisioning", "kind": "stage",    "meaning": "select and pin providers", "cadence": "per-company", "owner": "human chooses; agent pins" },
+    { "id": "build",        "kind": "pipeline", "meaning": "per-run build: sources, transform, classify, publish; referenced by onboarding as a template stage", "cadence": "per-run", "owner": "build" },
+    { "id": "curation",     "kind": "stage",    "meaning": "human-in-the-loop review and promotion; behind an approval", "cadence": "per-company", "owner": "human decides; agent records" },
+    { "id": "commit",       "kind": "stage",    "meaning": "config and outputs land as one commit", "cadence": "per-company", "owner": "agent" },
+    { "id": "sources",      "kind": "stage",    "meaning": "acquisition; fans out in parallel over every source type present", "cadence": "per-run", "owner": "build" },
+    { "id": "source-type",  "kind": "job",      "meaning": "a node type (source_type.*) naming where type information or instances come from; parallel sibling, not an alternative; its script is an adapter", "cadence": "per-run, per source type present", "owner": "build; declaring is config, adapter is engineering" },
+    { "id": "transform",    "kind": "stage",    "meaning": "flatten mints ids, links draws edges; pure, provider-agnostic", "cadence": "per-run", "owner": "build" },
+    { "id": "classify",     "kind": "stage",    "meaning": "every type id gets a classification; runs the fallthrough job", "cadence": "per-run", "owner": "build; rules in config" },
+    { "id": "fallthrough",  "kind": "job",      "meaning": "classification resolution, first match wins", "cadence": "per-type-id", "owner": "build" },
+    { "id": "publish",      "kind": "stage",    "meaning": "assemble graph.json and render graph.html", "cadence": "per-run", "owner": "build" },
+    { "id": "operations",   "kind": "pipeline", "meaning": "structural: schema, discovery, registry", "cadence": "structural", "owner": "architecture" },
+    { "id": "schema",       "kind": "stage",    "meaning": "the types, published by build, frozen", "cadence": "structural", "owner": "build" },
+    { "id": "discovery",    "kind": "stage",    "meaning": "fans out over source types to enumerate live instances", "cadence": "per-estate", "owner": "agent, read-only" },
+    { "id": "registry",     "kind": "stage",    "meaning": "skill registry; no registration means refuse", "cadence": "structural", "owner": "architecture" },
+    { "id": "gates",        "kind": "declarative", "meaning": "conditions and approvals between steps", "cadence": "cross-cutting", "owner": "build checks conditions; humans give approvals" },
+    { "id": "policies",     "kind": "declarative", "meaning": "always-true constraints", "cadence": "cross-cutting", "owner": "everyone" },
+    { "id": "artifacts",    "kind": "declarative", "meaning": "published files stages communicate through", "cadence": "cross-cutting", "owner": "build writes; everyone reads" }
+  ],
+  "pipelines": [
+    { "id": "onboarding", "sequence": 1, "cadence": "per-company", "colour": "#e08a6a",
+      "stages": [
+        { "id": "provisioning", "order": 1, "colour": "#f2a888", "ground": true,
+          "steps": [
+            { "id": "select", "order": 1, "ground": true, "writes": ["config/sources.json"] },
+            { "id": "pin",    "order": 2, "gate_before": "selected set written to sources.json" }
+          ] },
+        { "id": "build", "order": 2, "template": "build", "colour": "#58b47a", "gate_before": "provider versions pinned; init succeeded",
+          "steps": [ { "id": "run-build", "order": 3, "invokes": "build" } ] },
+        { "id": "curation", "order": 3, "colour": "#f0b8a0", "approval": true, "owner": "human", "gate_before": "build completed and published an unclassified list",
+          "steps": [
+            { "id": "review",  "order": 4, "reads": ["unclassified"] },
+            { "id": "promote", "order": 5, "approval_before": "each unclassified type has a human decision attached", "writes": ["config/layers.yaml", "config/roles.yaml"] }
+          ] },
+        { "id": "commit", "order": 4, "colour": "#f8cdb8", "gate_before": "nothing left unclassified, or every remainder has a written reason",
+          "steps": [ { "id": "commit", "order": 6 } ] }
+      ] },
+    { "id": "build", "sequence": 2, "cadence": "per-run", "colour": "#58b47a", "aliases": ["pipeline"],
+      "stages": [
+        { "id": "sources", "order": 1, "colour": "#3f8f60", "ground": true, "reads": ["config/sources.json"], "fan_out": "parallel; every source type present runs, absent ones skipped",
+          "jobs": [
+            { "id": "terraform", "kind": "source-type", "type_id": "source_type.terraform", "status": "active", "steps": [
+                { "id": "harvest", "order": 1, "ground": true, "writes": ["sources/terraform/out/*schema*"] },
+                { "id": "docs",    "order": 2, "gate_before": "raw schema on disk" } ] },
+            { "id": "cli",     "kind": "source-type", "type_id": "source_type.cli", "status": "deferred", "steps": [ { "id": "walk-commands", "order": 1 } ], "feeds": "fallthrough.structural" },
+            { "id": "openapi", "kind": "source-type", "type_id": "source_type.openapi", "status": "deferred", "steps": [ { "id": "fetch-spec", "order": 1 } ] }
+          ] },
+        { "id": "transform", "order": 2, "colour": "#6fc98f", "contract_before": "every source type returns the same shape: raw type records with a provider namespace", "provider_agnostic": true,
+          "steps": [
+            { "id": "flatten", "order": 3, "writes": ["types.json"], "mints_ids": true },
+            { "id": "links",   "order": 4, "gate_before": "type ids namespaced and unique", "writes": ["links.json"] }
+          ] },
+        { "id": "classify", "order": 3, "colour": "#8ad4a6", "gate_before": "every type id in links.json exists in types.json",
+          "jobs": [
+            { "id": "fallthrough", "status": "active", "steps": [ { "id": "classify", "order": 5, "writes": ["categories.json", "unclassified"] } ] }
+          ] },
+        { "id": "publish", "order": 4, "colour": "#b3e6c4", "gate_before": "every node has a classification entry, even if unclassified",
+          "steps": [
+            { "id": "graph",  "order": 6, "writes": ["graph.json"], "edge_kinds": ["contained_by", "references"] },
+            { "id": "render", "order": 7, "gate_before": "graph.json validates against contract 1.1.0", "writes": ["graph.html"] }
+          ] }
+      ] },
+    { "id": "operations", "sequence": 3, "cadence": "structural", "colour": "#e6c85f", "shared_with": "ontology-layering-model.html",
+      "stages": [
+        { "id": "schema", "order": 1, "colour": "#f0d88a", "ground": true, "produced_by": "build",
+          "steps": [ { "id": "types", "order": 1, "ground": true } ] },
+        { "id": "discovery", "order": 2, "colour": "#b8a54a", "status": "deferred", "gate_before": "type ids exist and are frozen", "fan_out": "parallel; every source type present runs",
+          "jobs": [
+            { "id": "az-devops", "kind": "source-type", "type_id": "source_type.az_devops", "status": "deferred", "steps": [ { "id": "instances", "order": 2, "hierarchy": ["organisation", "project", "repo", "pipeline"] } ] }
+          ] },
+        { "id": "registry", "order": 3, "colour": "#d4bf6f", "status": "deferred", "gate_before": "instances resolve to a type id; no orphan resources",
+          "steps": [ { "id": "skills", "order": 3, "failure_mode": "refuse" } ] }
+      ] }
+  ],
+  "jobs": [
+    { "id": "fallthrough", "stage": "build.classify", "cadence": "per-type-id", "colour": "#5fc4c4", "rule": "first match wins, bottom-up",
+      "steps": [
+        { "id": "explicit",     "order": 1, "tier": 1, "ground": true, "reads": ["config/layers.yaml", "config/roles.yaml"] },
+        { "id": "structural",   "order": 2, "tier": 2, "gate_before": "no explicit entry", "fed_by": "source-type.cli" },
+        { "id": "keyword",      "order": 3, "tier": 3, "gate_before": "no structural signal" },
+        { "id": "unclassified", "order": 4, "tier": null, "gate_before": "no keyword rule matched", "value": "unclassified" }
+      ] }
+  ],
+  "declarative": [
+    { "id": "gates",    "colour": "#b48ce6", "rules": ["condition: predicate over an artifact", "approval: a condition a human satisfies; curation is the only one", "failure stops", "checked by Invoke-Build, never by reading out/", "never mutates", "exceptions live in config", "sources→transform gate is the source-type contract"] },
+    { "id": "policies", "colour": "#8fb2d9", "rules": ["type ids never change", "layer names never change; mappings grow", "classification is a tiered property bag", "hierarchy is an edge", "existence tier separate from label tier", "every source type returns the same shape", "every step lives in exactly one stage", "source types are node types (source_type.*) in the ontology", "knowledge before engagement", "pwsh 7.4+, one script per source, StrictMode Latest, System.Text.Json, whole files"] },
+    { "id": "artifacts", "colour": "#c6a6d9",
+      "files": [
+        { "path": "config/sources.json",     "written_by": "onboarding.provisioning.select", "read_by": ["build.sources"] },
+        { "path": "config/layers.yaml",      "written_by": "onboarding.curation.promote",    "read_by": ["fallthrough.explicit"] },
+        { "path": "config/roles.yaml",       "written_by": "onboarding.curation.promote",    "read_by": ["fallthrough.explicit"] },
+        { "path": "sources/terraform/out/*", "written_by": "build.sources.terraform.harvest", "read_by": ["build.sources.terraform.docs"] },
+        { "path": "types.json",              "written_by": "build.transform.flatten",         "read_by": ["build.transform.links", "build.classify", "build.publish.graph", "operations.discovery", "operations.registry"] },
+        { "path": "links.json",              "written_by": "build.transform.links",           "read_by": ["build.publish.graph"] },
+        { "path": "categories.json",         "written_by": "build.classify",                  "read_by": ["build.publish.graph"] },
+        { "path": "unclassified",            "written_by": "build.classify",                  "read_by": ["onboarding.curation.review"] },
+        { "path": "graph.json",              "written_by": "build.publish.graph",             "read_by": ["build.publish.render"] },
+        { "path": "graph.html",              "written_by": "build.publish.render",            "read_by": ["human"] },
+        { "path": "skill-registry",          "written_by": "operations.registry.skills",      "read_by": ["agent"], "status": "deferred" }
+      ] }
+  ],
+  "relationships": [
+    { "from": "onboarding", "rel": "contains",   "to": ["provisioning", "curation", "commit"] },
+    { "from": "onboarding", "rel": "invokes",    "to": "build" },
+    { "from": "build",      "rel": "contains",   "to": ["sources", "transform", "classify", "publish"] },
+    { "from": "sources",    "rel": "fans_out",   "to": "source-type" },
+    { "from": "classify",   "rel": "contains",   "to": "fallthrough" },
+    { "from": "build",      "rel": "publishes",  "to": "schema" },
+    { "from": "operations", "rel": "contains",   "to": ["schema", "discovery", "registry"] },
+    { "from": "discovery",  "rel": "fans_out",   "to": "source-type" },
+    { "from": "curation",   "rel": "feeds",      "to": "fallthrough" },
+    { "from": "gates",      "rel": "gates",      "to": "*" },
+    { "from": "policies",   "rel": "constrains", "to": "*" },
+    { "from": "artifacts",  "rel": "carries",    "to": "*" },
+    { "from": "ontology-order-of-operations", "rel": "depends_on", "to": "ontology-layering-model" }
+  ],
+  "open": [
+    "pipeline ② renamed Pipeline → Build; earlier notes and CLAUDE.md still say pipeline",
+    "emit this model as a real pipeline YAML from the build?",
+    "pin+init: per-provider directory via manifest, or one root init",
+    "unclassified list: inside categories.json or its own file",
+    "source-type contract shape must be written before a second adapter is attempted",
+    "fallthrough tier 2 (structural): own tier now, or collapse into tier 3 until CLI adapter exists",
+    "discovery→registry gate assumes complete discovery; need partial-inventory policy",
+    "rename layering page's Storage container to Persistence (collides with the storage layer)"
+  ]
+}
+</script>
+
+</main>
+</body>
+</html>

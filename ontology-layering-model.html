@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ontology Builder — layering model and vocabulary</title>
+<style>
+  :root {
+    --bg: #14181f; --panel: #1c2129; --panel2: #232a34; --line: #2c333d; --line2: #3d4653;
+    --ink: #d9dde3; --dim: #8a929d; --warn: #e0705a;
+    /* controlled vocabulary — one colour per named container, used everywhere */
+    --c-stack: #58b47a;
+    --c-infrastructure: #3f8f60;
+    --c-rungs: #d9a441;
+    --c-knowledge: #4f9de6;
+    --c-engagement: #e0894a;
+    --c-crosscutting: #b48ce6;
+    --c-dimensions: #5fc4c4;
+    --c-storage: #c6a6d9;
+    --c-tiers: #8fb2d9;
+    --c-operations: #e6c85f;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; background: var(--bg); color: var(--ink); }
+  body { font: 15px/1.6 "IBM Plex Sans", "Segoe UI", system-ui, sans-serif; padding: 40px 24px 80px; }
+  main { max-width: 1120px; margin: 0 auto; }
+  h1 { font-size: 30px; font-weight: 600; margin: 0 0 6px; letter-spacing: -0.01em; }
+  h1 + p { color: var(--dim); margin: 0 0 24px; }
+  h2 { font-size: 20px; font-weight: 600; margin: 48px 0 12px; padding-top: 24px; border-top: 1px solid var(--line); }
+  p { margin: 0 0 12px; max-width: 76ch; }
+  code { font: 13px/1.5 "Cascadia Code", "JetBrains Mono", Consolas, monospace; background: #0f1319; padding: 1px 6px; border-radius: 3px; }
+  table { border-collapse: collapse; width: 100%; margin: 14px 0; font-size: 14px; }
+  th, td { text-align: left; padding: 9px 12px; border-bottom: 1px solid var(--line); vertical-align: top; }
+  th { color: var(--dim); font-weight: 500; }
+  dl { margin: 0; } dt { font-weight: 600; margin-top: 14px; } dd { margin: 2px 0 0; max-width: 76ch; }
+  ul { padding-left: 22px; } li { margin: 6px 0; }
+
+  /* reading convention banner */
+  .convention { border: 1px solid var(--line2); border-radius: 8px; background: var(--panel); padding: 14px 18px; margin: 0 0 8px; max-width: none; }
+  .convention b { display: block; margin-bottom: 4px; }
+  .convention p { max-width: none; margin: 0; }
+
+  /* vocabulary chips — same colour wherever a container is named */
+  .v { font-weight: 600; padding: 0 5px; border-radius: 3px; background: #0f1319; border: 1px solid; }
+  .v-stack { color: var(--c-stack); border-color: var(--c-stack); }
+  .v-infrastructure { color: var(--c-infrastructure); border-color: var(--c-infrastructure); }
+  .v-rungs { color: var(--c-rungs); border-color: var(--c-rungs); }
+  .v-knowledge { color: var(--c-knowledge); border-color: var(--c-knowledge); }
+  .v-engagement { color: var(--c-engagement); border-color: var(--c-engagement); }
+  .v-crosscutting { color: var(--c-crosscutting); border-color: var(--c-crosscutting); }
+  .v-dimensions { color: var(--c-dimensions); border-color: var(--c-dimensions); }
+  .v-storage { color: var(--c-storage); border-color: var(--c-storage); }
+  .v-tiers { color: var(--c-tiers); border-color: var(--c-tiers); }
+  .v-operations { color: var(--c-operations); border-color: var(--c-operations); }
+
+  /* containers */
+  .container { border: 1px solid; border-radius: 8px; background: var(--panel); padding: 12px; margin-top: 14px; }
+  .container > header { font-weight: 600; margin-bottom: 2px; }
+  .container > header small { display: block; color: var(--dim); font-weight: 400; font-size: 13px; }
+  .container > .order { color: var(--dim); font-size: 12px; margin-bottom: 10px; }
+  .container .container { background: var(--panel2); }
+  [data-container="stack"] { border-color: var(--c-stack); } [data-container="stack"] > header { color: var(--c-stack); }
+  [data-container="infrastructure"] { border-color: var(--c-infrastructure); } [data-container="infrastructure"] > header { color: var(--c-infrastructure); }
+  [data-container="rungs"] { border-color: var(--c-rungs); } [data-container="rungs"] > header { color: var(--c-rungs); }
+  [data-container="knowledge"] { border-color: var(--c-knowledge); } [data-container="knowledge"] > header { color: var(--c-knowledge); }
+  [data-container="engagement"] { border-color: var(--c-engagement); } [data-container="engagement"] > header { color: var(--c-engagement); }
+  [data-container="crosscutting"] { border-color: var(--c-crosscutting); } [data-container="crosscutting"] > header { color: var(--c-crosscutting); }
+  [data-container="dimensions"] { border-color: var(--c-dimensions); } [data-container="dimensions"] > header { color: var(--c-dimensions); }
+  [data-container="storage"] { border-color: var(--c-storage); } [data-container="storage"] > header { color: var(--c-storage); }
+  [data-container="tiers"] { border-color: var(--c-tiers); } [data-container="tiers"] > header { color: var(--c-tiers); }
+  [data-container="operations"] { border-color: var(--c-operations); } [data-container="operations"] > header { color: var(--c-operations); }
+
+  .box { border: 1px solid var(--line); border-radius: 5px; padding: 8px 10px; margin-top: 6px; background: var(--bg); }
+  .box b { display: block; }
+  .box small { display: block; color: var(--dim); font-size: 12.5px; line-height: 1.45; }
+  .box[data-ground="true"] { border-color: var(--ink); border-width: 2px; }
+  .box[data-status="deferred"] { opacity: .55; }
+  .arrow { color: var(--dim); font-size: 12px; text-align: center; padding: 4px 0 0; }
+
+  .diagram { display: grid; grid-template-columns: 1fr 1.1fr 1fr; gap: 18px; margin: 16px 0 8px; align-items: end; }
+  .diagram > .container { margin-top: 0; }
+  .two { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; align-items: start; }
+  .two > .container { margin-top: 0; }
+  @media (max-width: 900px) { .diagram, .two { grid-template-columns: 1fr; align-items: stretch; } }
+</style>
+</head>
+<body>
+<main>
+
+<h1>Layering model and vocabulary</h1>
+<p>Ontology Builder — the battle plan in visual form. Human-readable here; machine-readable in the JSON block at the end of the file. Same model, one file.</p>
+
+<div class="convention">
+  <b>How to read this document</b>
+  <p>Every bordered box is a named container. Inside a container, <b>the bottom item holds the most weight</b>: everything above it depends on it and cannot exist until it is in place. Read bottom-up. The item with the heavy border is the ground of that container. A container's name is always shown in the same colour, wherever it appears, so <span class="v v-knowledge">Knowledge</span> in a table means the same thing as the <span class="v v-knowledge">Knowledge</span> box in the diagram.</p>
+</div>
+
+<h2>The one-line version</h2>
+<p><b>Schema is the ground.</b> Without it there is no discovery, no state, no action — nothing. <span class="v v-infrastructure">Infrastructure</span> is the floor of the <span class="v v-stack">Stack</span>, and networking is the floor of infrastructure. Every level, and every level inside a level, runs the same four <span class="v v-rungs">Rungs</span>. The model is fractal: build the mechanism once, point it at each domain.</p>
+
+<h2>The diagram</h2>
+<div class="diagram">
+
+  <div class="container" data-container="stack" data-order="build" data-direction="bottom-up">
+    <header>Stack<small>What exists, layered</small></header>
+    <div class="order">Order: build order — each layer cannot exist until the one below it does</div>
+    <div class="box" data-member="ai-agents" data-status="deferred"><b>AI &amp; agents</b><small>Exists in the model now, populated later</small></div>
+    <div class="arrow">rests on ↓</div>
+    <div class="box" data-member="applications" data-status="deferred"><b>Applications</b><small>Exists in the model now, populated later</small></div>
+    <div class="arrow">rests on ↓</div>
+    <div class="box" data-member="configuration" data-status="deferred"><b>Configuration</b><small>Ansible, DSC. Exists in the model now, populated later</small></div>
+    <div class="arrow">rests on ↓</div>
+    <div class="container" data-container="infrastructure" data-order="build" data-direction="bottom-up" data-status="in-scope">
+      <header>Infrastructure<small>The floor of the Stack — in scope now</small></header>
+      <div class="box" data-member="compute"><b>Compute</b><small>VMs, clusters, functions</small></div>
+      <div class="arrow">rests on ↓</div>
+      <div class="box" data-member="storage"><b>Storage</b><small>Accounts, buckets, datastores</small></div>
+      <div class="arrow">rests on ↓</div>
+      <div class="box" data-member="networking" data-ground="true"><b>Networking — the floor of the floor</b><small>VNets, VPCs, port groups. Nothing in tech land exists without it</small></div>
+    </div>
+  </div>
+
+  <div class="container" data-container="rungs" data-order="dependency" data-direction="bottom-up" data-fractal="true">
+    <header>Rungs<small>What you can do about it — fractal, applies at every level of the Stack</small></header>
+    <div class="order">Order: dependency order — each rung is meaningless without the one below it</div>
+    <div class="container" data-container="engagement" data-order="dependency" data-direction="bottom-up">
+      <header>Engagement<small>Touches the live system</small></header>
+      <div class="box" data-member="action"><b>Action</b><small>The verbs: start, stop, scale, redeploy. Where the skill registry binds. The agent runs only what is registered against that type id and verb; nothing registered → error. The refusal is the product.</small></div>
+      <div class="arrow">needs a known instance ↓</div>
+      <div class="box" data-member="state"><b>State</b><small>Current values for an instance you already know. Is the VM running, is the pipeline green. Resolve the path, query only that branch, never enumerate everything.</small></div>
+    </div>
+    <div class="arrow">declared → live boundary</div>
+    <div class="container" data-container="knowledge" data-order="dependency" data-direction="bottom-up">
+      <header>Knowledge<small>Read-only, cacheable, no consequences</small></header>
+      <div class="box" data-member="discovery"><b>Discovery</b><small>Enumerate what exists, via CLI/API, walking the hierarchy. Bound to Schema by type id. The deeper the node, the shorter its shelf life. The CLI command tree is evidence of hierarchy.</small></div>
+      <div class="arrow">needs a type to resolve to ↓</div>
+      <div class="box" data-member="schema" data-ground="true"><b>Schema — the ground</b><small>= the ontology. What <i>can</i> exist, how it is shaped, how it relates. No instances, no state. Terraform lives entirely here. Type ids are minted here and everything else keys off them.</small></div>
+    </div>
+  </div>
+
+  <div class="container" data-container="crosscutting" data-order="binding" data-direction="inside-out">
+    <header>Cross-cutting<small>Attach at every level of the Stack — never a floor</small></header>
+    <div class="order">Order: binding order, inside-out — how tightly welded to the thing it touches</div>
+    <div class="box" data-member="intent"><b>Intent</b><small>A goal decomposed into Actions. Needs everything else first. This is agent planning, not really a layer of the model.</small></div>
+    <div class="arrow">needs actions to govern ↓</div>
+    <div class="box" data-member="policy"><b>Policy</b><small>Who may invoke which Action, under which conditions, with what approval. Makes the agent trustworthy rather than merely constrained.</small></div>
+    <div class="arrow">needs something to watch ↓</div>
+    <div class="box" data-member="observability"><b>Observability</b><small>Monitoring. Watches the ground, the house and the roof. Datadog's SaaS is an application pointed at your estate — not infrastructure.</small></div>
+    <div class="arrow">sits on the boundary ↓</div>
+    <div class="box" data-member="security"><b>Security</b><small>Vault, key management, enforcement at the boundary.</small></div>
+    <div class="arrow">cannot address a resource without it ↓</div>
+    <div class="box" data-member="identity" data-ground="true"><b>Identity &amp; boundary — innermost</b><small>Tenants, subscriptions, resource groups, datacenters, folders. The hierarchy is the address.</small></div>
+  </div>
+
+</div>
+
+<h2>How the containers connect</h2>
+<table id="relationships">
+  <tr><th>From</th><th>Relationship</th><th>To</th></tr>
+  <tr><td><span class="v v-stack">Stack</span> (any layer)</td><td>is described by</td><td><span class="v v-rungs">Rungs</span> — every layer runs all four; that is the fractal claim</td></tr>
+  <tr><td><span class="v v-knowledge">Knowledge</span></td><td>feeds</td><td><span class="v v-engagement">Engagement</span> — you cannot read State or Act on a thing you have not discovered and typed</td></tr>
+  <tr><td><span class="v v-knowledge">Knowledge</span> · Schema</td><td>mints type ids consumed by</td><td>Discovery, Action (skill registry), and the <span class="v v-stack">Stack</span>'s layer labels</td></tr>
+  <tr><td><span class="v v-crosscutting">Cross-cutting</span> · Identity</td><td>supplies the address used by</td><td><span class="v v-knowledge">Knowledge</span> · Discovery and <span class="v v-engagement">Engagement</span> · State</td></tr>
+  <tr><td><span class="v v-crosscutting">Cross-cutting</span> · Policy</td><td>gates</td><td><span class="v v-engagement">Engagement</span> · Action — at every level of the <span class="v v-stack">Stack</span> alike</td></tr>
+  <tr><td><span class="v v-crosscutting">Cross-cutting</span> · Observability</td><td>reads</td><td><span class="v v-engagement">Engagement</span> · State — at every level of the <span class="v v-stack">Stack</span> alike</td></tr>
+  <tr><td><span class="v v-crosscutting">Cross-cutting</span> · Intent</td><td>decomposes into</td><td><span class="v v-engagement">Engagement</span> · Action, subject to Policy</td></tr>
+  <tr><td><span class="v v-operations">Operations</span></td><td>is the sequence for building</td><td><span class="v v-knowledge">Knowledge</span> then <span class="v v-engagement">Engagement</span></td></tr>
+  <tr><td><span class="v v-tiers">Tiers</span></td><td>grade every label in</td><td><span class="v v-dimensions">Dimensions</span> and every node in <span class="v v-storage">Storage</span></td></tr>
+</table>
+
+<h2>Two kinds of structure</h2>
+<dl>
+  <dt><span class="v v-stack">Stack</span></dt>
+  <dd>Things that genuinely rest on each other. Modelled as containment and dependency edges.</dd>
+  <dt><span class="v v-crosscutting">Cross-cutting</span></dt>
+  <dd>Things that attach at every level rather than sitting between two of them. Modelled as labels on nodes, never as a layer. Test: if putting it in the Stack means it has to sit <i>between</i> two floors and nothing rests on it, it is not a floor. It is a role.</dd>
+</dl>
+
+<div class="two">
+
+  <div class="container" data-container="dimensions" data-order="derivation" data-direction="bottom-up">
+    <header>Dimensions<small>Three independent labels on every node</small></header>
+    <div class="order">A dimension is one axis a node can be positioned along, independently of the others. Same node, three labels, filter on any one. Order: derivation order — the bottom one is available first and the others build on it.</div>
+    <div class="box" data-member="business-context" data-status="deferred"><b>Business context</b><small>Who owns it, how much does it matter — cost centre, service owner, criticality, compliance scope. Later. Slots in with no refactor.</small></div>
+    <div class="arrow">needs a typed, placed node ↓</div>
+    <div class="box" data-member="role"><b>Role</b><small>What job does it do — substrate, orchestration, observability, security, data services, edge. Derived from reference direction.</small></div>
+    <div class="arrow">needs the schema ↓</div>
+    <div class="box" data-member="layer" data-ground="true"><b>Layer</b><small>Where does it sit — networking, storage, compute, identity; configuration, application, ai. Comes straight from Schema vocabulary.</small></div>
+  </div>
+
+  <div class="container" data-container="storage" data-order="dependency" data-direction="bottom-up">
+    <header>Storage<small>How it is written to <code>graph.json</code> so later work needs no rework</small></header>
+    <div class="order">Order: dependency order — labels need edges to mean anything, edges need nodes to exist</div>
+    <div class="box" data-member="classification"><b>Classification = a label on a node</b><small>Every node carries a property bag of classifications — name, value, tier. Layer and Role are entries in it; Business context is more entries later. The renderer loops over whatever is there. Never write <code>layer</code> and <code>role</code> as fixed top-level fields read by name.</small></div>
+    <div class="arrow">attaches to ↓</div>
+    <div class="box" data-member="hierarchy"><b>Hierarchy = an edge between two nodes</b><small><code>contained_by</code> is structural, in the edge list alongside <code>references</code> as a first-class queryable kind — not a <code>parent</code> hint in node data. <code>owned_by</code>, <code>depends_on</code> slot in later.</small></div>
+    <div class="arrow">connects ↓</div>
+    <div class="box" data-member="existence" data-ground="true"><b>Existence = the node and its existence tier</b><small>How sure we are the thing exists at all. vSphere datacenter: certain, the schema mandates it. Datadog-implied host: inferred. Separate from label tiers. Currently missing from real nodes — needs adding.</small></div>
+  </div>
+
+</div>
+
+<div class="two">
+
+  <div class="container" data-container="tiers" data-order="trust" data-direction="bottom-up">
+    <header>Tiers<small>How much a fact can be trusted</small></header>
+    <div class="order">Order: trust order — the bottom tier is ground truth; each tier above is weaker and defers to anything below it</div>
+    <div class="box" data-member="tier-4"><b>Tier 4 — inferred</b><small>Keyword rules, placeholders from unresolved references</small></div>
+    <div class="arrow">weaker than ↓</div>
+    <div class="box" data-member="tier-3"><b>Tier 3 — vendor taxonomy, CLI command tree</b></div>
+    <div class="arrow">weaker than ↓</div>
+    <div class="box" data-member="tier-2"><b>Tier 2 — vendor documentation</b></div>
+    <div class="arrow">weaker than ↓</div>
+    <div class="box" data-member="tier-1" data-ground="true"><b>Tier 1 — executable schema</b><small>Terraform provider schema. Ground truth.</small></div>
+  </div>
+
+  <div class="container" data-container="operations" data-order="sequence" data-direction="bottom-up">
+    <header>Operations<small>The order the work gets done in</small></header>
+    <div class="order">Order: sequence — the bottom step must be finished before the one above it can start</div>
+    <div class="box" data-member="skills"><b>Skills</b><small>Register each skill or PowerShell module against a type id and a verb. Cannot register against a type that does not exist yet.</small></div>
+    <div class="arrow">needs ↓</div>
+    <div class="box" data-member="instances"><b>Instances</b><small>Discovery walks live APIs and resolves each thing to a type id. Test bed: Azure DevOps via <code>az devops</code> — free tier, real hierarchy (organisation → project → repo → pipeline).</small></div>
+    <div class="arrow">needs ↓</div>
+    <div class="box" data-member="types" data-ground="true"><b>Types</b><small>Harvest schemas, mint namespaced type ids. Change them later and every registration breaks.</small></div>
+  </div>
+
+</div>
+
+<h2>Glossary</h2>
+<dl>
+  <dt>Ontology</dt><dd>The containment chains and edge kinds — actual relationships between real kinds of things. In this repo, the Schema rung of <span class="v v-knowledge">Knowledge</span>.</dd>
+  <dt>Taxonomy</dt><dd>The classification scheme — the layer list, the role list, and the rules for dropping things into them. Flat vocabularies. Lives in <span class="v v-dimensions">Dimensions</span>.</dd>
+  <dt>Instance</dt><dd>A real thing in a customer's estate, resolved to a type id. A customer's estate is instances of the Schema.</dd>
+  <dt>Type id</dt><dd>Namespaced identifier minted from the Schema: <code>aws_instance</code>, <code>data.aws_instance</code>, <code>ephemeral.x</code>, children via <code>/</code>.</dd>
+  <dt>Containment</dt><dd>The <code>contained_by</code> edge. The hierarchy is the address and the diagnostic context — where a thing sits tells you what it depends on.</dd>
+  <dt>Placeholder node</dt><dd>Tier-4 node created when a support service references infrastructure the provider does not model. Evidence of unmapped infrastructure, waiting to be joined.</dd>
+  <dt>Skill registry</dt><dd>Third artefact alongside <code>types.json</code> and <code>links.json</code>: which skill may act on which type id with which verb. The agent's leash at the Action rung of <span class="v v-engagement">Engagement</span>.</dd>
+  <dt>Declared vs live</dt><dd>The boundary between <span class="v v-knowledge">Knowledge</span> and <span class="v v-engagement">Engagement</span>. Terraform gives the map; it does not say the VM is powered off right now.</dd>
+  <dt>Fractal</dt><dd>The four <span class="v v-rungs">Rungs</span> repeat at every level of the <span class="v v-stack">Stack</span> and every sublevel. One mechanism, many domains.</dd>
+</dl>
+
+<h2>Still open</h2>
+<ul>
+  <li>Is Identity a layer of the <span class="v v-stack">Stack</span> or a role in <span class="v v-crosscutting">Cross-cutting</span>? Drawn here as innermost cross-cutting.</li>
+  <li>Are data services compute?</li>
+  <li>Is edge/CDN networking?</li>
+  <li>Where does <code>azuread</code> go?</li>
+  <li>Does the fan-in threshold for inferring containment need to be per-provider?</li>
+  <li>Inter-container connections: keep as the table, or draw lines?</li>
+</ul>
+
+<!-- Machine-readable model. Same content as the HTML above; this is the source an agent should parse. -->
+<script type="application/json" id="model">
+{
+  "readingConvention": "Inside a container, items are ordered bottom-up: the bottom item (ground=true) holds the most weight and everything above depends on it.",
+  "containers": [
+    {"id":"stack","label":"Stack","colour":"#58b47a","order":"build","direction":"bottom-up","members":["ai-agents","applications","configuration","infrastructure"],"ground":"infrastructure"},
+    {"id":"infrastructure","label":"Infrastructure","colour":"#3f8f60","parent":"stack","status":"in-scope","order":"build","direction":"bottom-up","members":["compute","storage","networking"],"ground":"networking"},
+    {"id":"rungs","label":"Rungs","colour":"#d9a441","fractal":true,"appliesTo":"every member of stack and every sublevel","order":"dependency","direction":"bottom-up","members":["engagement","knowledge"],"ground":"knowledge"},
+    {"id":"knowledge","label":"Knowledge","colour":"#4f9de6","parent":"rungs","traits":["read-only","cacheable","no consequences"],"order":"dependency","direction":"bottom-up","members":["discovery","schema"],"ground":"schema"},
+    {"id":"engagement","label":"Engagement","colour":"#e0894a","parent":"rungs","traits":["touches live system"],"order":"dependency","direction":"bottom-up","members":["action","state"],"ground":"state"},
+    {"id":"crosscutting","label":"Cross-cutting","colour":"#b48ce6","order":"binding","direction":"inside-out","members":["intent","policy","observability","security","identity"],"ground":"identity"},
+    {"id":"dimensions","label":"Dimensions","colour":"#5fc4c4","definition":"one axis a node can be positioned along, independently of the others","order":"derivation","direction":"bottom-up","members":["business-context","role","layer"],"ground":"layer"},
+    {"id":"storage","label":"Storage","colour":"#c6a6d9","order":"dependency","direction":"bottom-up","members":["classification","hierarchy","existence"],"ground":"existence"},
+    {"id":"tiers","label":"Tiers","colour":"#8fb2d9","order":"trust","direction":"bottom-up","members":["tier-4","tier-3","tier-2","tier-1"],"ground":"tier-1"},
+    {"id":"operations","label":"Operations","colour":"#e6c85f","order":"sequence","direction":"bottom-up","members":["skills","instances","types"],"ground":"types"}
+  ],
+  "members": {
+    "ai-agents":{"label":"AI & agents","status":"deferred"},
+    "applications":{"label":"Applications","status":"deferred"},
+    "configuration":{"label":"Configuration","status":"deferred","examples":["Ansible","DSC"]},
+    "compute":{"label":"Compute","examples":["VMs","clusters","functions"]},
+    "storage":{"label":"Storage","examples":["accounts","buckets","datastores"]},
+    "networking":{"label":"Networking","examples":["VNets","VPCs","port groups"]},
+    "schema":{"label":"Schema","alias":"ontology","source":"Terraform provider schemas","mints":"type ids"},
+    "discovery":{"label":"Discovery","alias":"inventory","cacheRule":"the deeper the node, the shorter its shelf life","hierarchyEvidence":"CLI command tree, tier 2-3"},
+    "state":{"label":"State","alias":"live values","rule":"resolve the path, query only that branch"},
+    "action":{"label":"Action","alias":"verbs","binds":"skill registry","rule":"nothing registered for type id + verb means error, not improvisation"},
+    "intent":{"label":"Intent","note":"agent planning, not a layer of the model"},
+    "policy":{"label":"Policy","gates":"action"},
+    "observability":{"label":"Observability","alias":"monitoring","reads":"state"},
+    "security":{"label":"Security"},
+    "identity":{"label":"Identity & boundary","examples":["tenant","subscription","resource group","datacenter","folder"],"supplies":"the address"},
+    "business-context":{"label":"Business context","status":"deferred","values":["cost centre","service owner","criticality","compliance scope"]},
+    "role":{"label":"Role","values":["substrate","orchestration","observability","security","data services","edge"],"derivedFrom":"reference direction"},
+    "layer":{"label":"Layer","values":["networking","storage","compute","identity","configuration","application","ai"]},
+    "classification":{"label":"Classification","storedAs":"property bag on node: name, value, tier"},
+    "hierarchy":{"label":"Hierarchy","storedAs":"edge kind contained_by, first-class, alongside references","later":["owned_by","depends_on"]},
+    "existence":{"label":"Existence","storedAs":"existence tier on node, separate from label tiers","status":"missing on real nodes"},
+    "tier-1":{"label":"Executable schema"},
+    "tier-2":{"label":"Vendor documentation"},
+    "tier-3":{"label":"Vendor taxonomy, CLI command tree"},
+    "tier-4":{"label":"Inferred"},
+    "types":{"label":"Types"},
+    "instances":{"label":"Instances","testBed":"Azure DevOps via az devops"},
+    "skills":{"label":"Skills"}
+  },
+  "relationships": [
+    {"from":"stack","rel":"is described by","to":"rungs","note":"fractal claim"},
+    {"from":"knowledge","rel":"feeds","to":"engagement"},
+    {"from":"schema","rel":"mints type ids consumed by","to":["discovery","action","layer"]},
+    {"from":"identity","rel":"supplies the address used by","to":["discovery","state"]},
+    {"from":"policy","rel":"gates","to":"action"},
+    {"from":"observability","rel":"reads","to":"state"},
+    {"from":"intent","rel":"decomposes into","to":"action","subjectTo":"policy"},
+    {"from":"operations","rel":"is the sequence for building","to":["knowledge","engagement"]},
+    {"from":"tiers","rel":"grade","to":["dimensions","storage"]}
+  ],
+  "open": [
+    "Is identity a stack layer or a cross-cutting role?",
+    "Are data services compute?",
+    "Is edge/CDN networking?",
+    "Where does azuread go?",
+    "Per-provider fan-in threshold for inferring containment?",
+    "Inter-container connections as table or drawn lines?"
+  ]
+}
+</script>
+
+</main>
+</body>
+</html>

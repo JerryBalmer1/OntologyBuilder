@@ -1,0 +1,90 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://psgraphrender/contract/viewmodel/1.1.0",
+  "version": "1.1.0",
+  "title": "PSGraphRender view model",
+  "description": "The payload New-RenderDocument embeds. Derived from what the module's own code reads: TemplateSets/plain/scripts/bootstrap.js, TemplateSets/cytoscape/scripts/bootstrap.js and elements.js, and Private/Contract/Test-RenderViewModel.ps1 (Resolve-RenderMeta, Assert-RenderContractVersion). Only fields a backend dereferences unconditionally are required; everything else a backend reads is typed but optional. Additional properties are allowed everywhere: plain renders every column it is given.",
+  "type": "object",
+  "required": ["meta", "data"],
+  "properties": {
+    "meta": {
+      "type": "object",
+      "description": "Resolved by Resolve-RenderMeta. Every field is optional; a missing contractVersion is warned about, not refused.",
+      "properties": {
+        "title": { "type": ["string", "null"] },
+        "version": { "type": ["string", "null"] },
+        "rootPath": { "type": ["string", "null"] },
+        "generatedAt": { "type": ["string", "null"] },
+        "contractVersion": { "type": "string", "pattern": "^\\d+\\.\\d+\\.\\d+$" }
+      }
+    },
+    "data": {
+      "type": "object",
+      "description": "New-RenderDocument: 'plain reads DATA.nodes and DATA.links directly, and that is only safe because the contract requires them'.",
+      "required": ["nodes", "links"],
+      "properties": {
+        "nodes": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/node" }
+        },
+        "links": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/link" }
+        },
+        "unresolved": {
+          "type": "array",
+          "description": "cytoscape: each entry becomes an External node keyed 'external:' + targetName.",
+          "items": { "$ref": "#/$defs/unresolved" }
+        },
+        "metrics": {
+          "type": "array",
+          "description": "cytoscape: metric ids read from node.metrics[id] and offered to ColorBy.",
+          "items": { "type": "string" }
+        }
+      }
+    }
+  },
+  "$defs": {
+    "node": {
+      "type": "object",
+      "description": "cytoscape elements.js builds an element with data.id = n.id; Cytoscape cannot create a node without one, and links resolve against it.",
+      "required": ["id"],
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "name": { "type": ["string", "null"] },
+        "kind": { "type": ["string", "null"] },
+        "isExported": { "type": ["boolean", "null"] },
+        "path": { "type": ["string", "null"] },
+        "startLine": { "type": ["integer", "null"] },
+        "metrics": {
+          "type": ["object", "null"],
+          "additionalProperties": { "type": "number" }
+        }
+      }
+    },
+    "link": {
+      "type": "object",
+      "description": "cytoscape elements.js builds an edge with data.source = l.source and data.target = l.target; Cytoscape cannot create an edge without both.",
+      "required": ["source", "target"],
+      "properties": {
+        "source": { "type": "string", "minLength": 1 },
+        "target": { "type": "string", "minLength": 1 },
+        "kind": { "type": ["string", "null"] },
+        "resolution": {
+          "type": ["string", "null"],
+          "description": "Contract 1.1.0, optional. Looked up in theme EdgeResolutionStyle; absent means the payload did not say."
+        }
+      }
+    },
+    "unresolved": {
+      "type": "object",
+      "required": ["targetName"],
+      "properties": {
+        "targetName": { "type": "string", "minLength": 1 },
+        "source": { "type": ["string", "null"] },
+        "path": { "type": ["string", "null"] },
+        "startLine": { "type": ["integer", "null"] }
+      }
+    }
+  }
+}

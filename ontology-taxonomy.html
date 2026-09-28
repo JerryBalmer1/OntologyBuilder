@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ontology Builder — strawman taxonomy</title>
+<style>
+  :root {
+    --bg: #1c1f26;
+    --panel: #242833;
+    --line: #3a4050;
+    --ink: #d8dce6;
+    --dim: #8b92a5;
+    --root: #c98a3a;
+    --net: #4f9dd6;
+    --sto: #6cb37a;
+    --cmp: #b98bd9;
+    --idn: #d9b45a;
+    --sup: #6f7a94;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; background: var(--bg); color: var(--ink); }
+  body {
+    font: 15px/1.55 "Segoe UI", system-ui, sans-serif;
+    padding: 32px 40px 80px;
+    max-width: 1180px;
+    margin: 0 auto;
+  }
+  h1 { font-size: 22px; font-weight: 600; margin: 0 0 4px; }
+  h2 { font-size: 17px; font-weight: 600; margin: 44px 0 12px; color: var(--ink); }
+  p  { max-width: 72ch; margin: 0 0 10px; }
+  .sub { color: var(--dim); margin-bottom: 28px; }
+  code { font-family: Consolas, "Cascadia Mono", monospace; font-size: 13px; background: #2c3140; padding: 1px 5px; border-radius: 3px; }
+
+  /* ---- the stack ---- */
+  .stack { display: grid; gap: 6px; margin: 16px 0; }
+  .tier {
+    display: grid; grid-template-columns: 170px 1fr; gap: 16px;
+    border: 1px solid var(--line); border-radius: 6px; padding: 12px 16px;
+    background: var(--panel);
+  }
+  .tier.deferred { opacity: .45; border-style: dashed; }
+  .tier .name { font-weight: 600; }
+  .tier .name small { display: block; font-weight: 400; color: var(--dim); font-size: 13px; }
+  .tier .note { color: var(--dim); font-size: 14px; }
+  .tier.root { border-color: var(--root); border-width: 2px; background: #2a251e; }
+  .tier.root .name { color: var(--root); }
+
+  /* ---- inner layers ---- */
+  .layers { display: grid; gap: 4px; margin-top: 12px; }
+  .layer {
+    display: grid; grid-template-columns: 150px 1fr; gap: 14px;
+    padding: 9px 12px; border-radius: 4px; border-left: 4px solid;
+    background: #1f232c;
+  }
+  .layer.net { border-color: var(--net); }
+  .layer.sto { border-color: var(--sto); }
+  .layer.cmp { border-color: var(--cmp); }
+  .layer.idn { border-color: var(--idn); }
+  .layer .lname { font-weight: 600; font-size: 14px; }
+  .layer .lname small { display: block; font-weight: 400; color: var(--dim); }
+  .types { display: flex; flex-wrap: wrap; gap: 5px; }
+  .types code { background: #2c3140; }
+
+  /* ---- roles table ---- */
+  table { border-collapse: collapse; width: 100%; font-size: 14px; margin-top: 12px; }
+  th, td { text-align: left; padding: 9px 12px; border-bottom: 1px solid var(--line); vertical-align: top; }
+  th { color: var(--dim); font-weight: 600; }
+  td.role { font-weight: 600; white-space: nowrap; }
+  td.role.substrate { color: var(--root); }
+  td .tell { color: var(--dim); font-size: 13px; display: block; margin-top: 3px; }
+
+  /* ---- containment chain ---- */
+  .chain { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin: 12px 0 6px; }
+  .chain .n {
+    border: 1px solid var(--line); background: var(--panel); border-radius: 4px;
+    padding: 6px 10px; font-family: Consolas, "Cascadia Mono", monospace; font-size: 13px;
+  }
+  .chain .n.cloud { border-color: var(--root); }
+  .chain .n.net   { border-color: var(--net); }
+  .chain .n.cmp   { border-color: var(--cmp); }
+  .chain .arrow { color: var(--dim); }
+  .chain-note { color: var(--dim); font-size: 13px; }
+
+  /* ---- rules ---- */
+  .rules { display: grid; gap: 8px; margin-top: 12px; }
+  .rule { display: grid; grid-template-columns: 24px 1fr; gap: 10px; padding: 10px 12px; background: var(--panel); border-radius: 4px; border: 1px solid var(--line); }
+  .rule .k { color: var(--root); font-weight: 700; font-family: Consolas, monospace; }
+  .rule .k.q { color: var(--dim); }
+  .rule .body small { display: block; color: var(--dim); font-size: 13px; margin-top: 3px; }
+
+  /* ---- key ---- */
+  .key { display: flex; flex-wrap: wrap; gap: 14px; font-size: 13px; color: var(--dim); margin-top: 8px; }
+  .key i { display: inline-block; width: 10px; height: 10px; border-radius: 2px; margin-right: 5px; vertical-align: -1px; }
+
+  @media (max-width: 760px) {
+    body { padding: 20px 16px 60px; }
+    .tier, .layer { grid-template-columns: 1fr; gap: 6px; }
+  }
+</style>
+</head>
+<body>
+
+<h1>Ontology Builder — strawman taxonomy</h1>
+<p class="sub">Two axes: <strong>where a thing sits</strong> (layer, vertical) and <strong>what it does</strong> (role, horizontal). Everything here is a first guess to argue with. Once agreed, it becomes <code>config/layers.yaml</code> and <code>config/roles.yaml</code>, and the agent works against those, not prose.</p>
+
+<!-- =============================================== -->
+<h2>The stack — infrastructure is the floor</h2>
+<p>Each tier binds downward to the one below it. Solve the bottom tier, expose outputs, then the next tier becomes a smaller problem. Only the bottom tier is in scope now; the rest are named so the config has somewhere to put them later.</p>
+
+<div class="stack">
+  <div class="tier deferred">
+    <div class="name">AI &amp; agents<small>later</small></div>
+    <div class="note">Consumes everything below. Binds to an application, which binds to config, which binds to a host. Not modelled yet.</div>
+  </div>
+  <div class="tier deferred">
+    <div class="name">Applications<small>later</small></div>
+    <div class="note">The thing a business actually pays for. Source: app inventories, CMDB, whatever the customer has.</div>
+  </div>
+  <div class="tier deferred">
+    <div class="name">Configuration<small>later</small></div>
+    <div class="note">What runs on the infrastructure and how it's set up. Source: Ansible, DSC, Chef, image definitions.</div>
+  </div>
+  <div class="tier root">
+    <div class="name">Infrastructure<small>in scope · source: Terraform provider schemas</small></div>
+    <div>
+      <div class="note">Physical, virtual, or software-defined — it's still infrastructure. It exists whether or not anything above it declares it. Inside this tier there is a second stack:</div>
+      <div class="layers">
+        <div class="layer net">
+          <div class="lname">Networking<small>the floor inside the floor</small></div>
+          <div class="types">
+            <code>azurerm_virtual_network</code><code>azurerm_subnet</code><code>aws_vpc</code><code>aws_subnet</code><code>vsphere_distributed_port_group</code><code>azurerm_network_security_group</code><code>aws_route_table</code>
+          </div>
+        </div>
+        <div class="layer sto">
+          <div class="lname">Storage<small>sits on the network</small></div>
+          <div class="types">
+            <code>azurerm_storage_account</code><code>aws_s3_bucket</code><code>vsphere_datastore</code><code>azurerm_managed_disk</code><code>aws_ebs_volume</code>
+          </div>
+        </div>
+        <div class="layer cmp">
+          <div class="lname">Compute<small>needs both below it</small></div>
+          <div class="types">
+            <code>azurerm_linux_virtual_machine</code><code>aws_instance</code><code>vsphere_virtual_machine</code><code>azurerm_kubernetes_cluster</code><code>azurerm_virtual_machine_scale_set</code><code>aws_eks_cluster</code>
+          </div>
+        </div>
+        <div class="layer idn">
+          <div class="lname">Identity &amp; boundary<small>cross-cutting — contains, doesn't stack</small></div>
+          <div class="types">
+            <code>azurerm_resource_group</code><code>azurerm_subscription</code><code>aws_organizations_account</code><code>vsphere_datacenter</code><code>vsphere_folder</code>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="key">
+  <span><i style="background:var(--net)"></i>networking</span>
+  <span><i style="background:var(--sto)"></i>storage</span>
+  <span><i style="background:var(--cmp)"></i>compute</span>
+  <span><i style="background:var(--idn)"></i>identity / boundary</span>
+</div>
+
+<!-- =============================================== -->
+<h2>The role axis — substrate vs everything that leans on it</h2>
+<p>A provider's role is mostly decidable from the direction its references point. Substrate providers get referenced; support providers do the referencing and rarely contain anything.</p>
+
+<table>
+  <tr><th>Role</th><th>What it is</th><th>Example providers</th></tr>
+  <tr>
+    <td class="role substrate">Substrate</td>
+    <td>Owns the things that physically or virtually exist. Has containment.<span class="tell">Tell: high fan-in. Many types reference it; it references few outside itself.</span></td>
+    <td><code>azurerm</code> <code>aws</code> <code>google</code> <code>vsphere</code> <code>proxmox</code></td>
+  </tr>
+  <tr>
+    <td class="role">Orchestration</td>
+    <td>Builds, deploys, schedules. Has its own internal hierarchy (org → project → pipeline) but that hierarchy contains no infrastructure.<span class="tell">Tell: references substrate via "agent pool", "environment", "service connection".</span></td>
+    <td><code>azuredevops</code> <code>github</code> <code>gitlab</code></td>
+  </tr>
+  <tr>
+    <td class="role">Observability</td>
+    <td>Watches things. Never creates the host it monitors.<span class="tell">Tell: references outward only. Zero containment of substrate types.</span></td>
+    <td><code>datadog</code> <code>newrelic</code> <code>grafana</code></td>
+  </tr>
+  <tr>
+    <td class="role">Security &amp; secrets</td>
+    <td>Gates access, holds credentials. Attached to substrate, not part of it.<span class="tell">Tell: references identity-layer types; vocabulary is "policy", "role", "secret".</span></td>
+    <td><code>vault</code> <code>okta</code> <code>azuread</code></td>
+  </tr>
+  <tr>
+    <td class="role">Data services</td>
+    <td>Managed databases, queues, caches. Ambiguous — a managed Postgres is compute+storage the vendor hides.<span class="tell">Open question: is this a role, or is it compute inside the substrate?</span></td>
+    <td><code>azurerm_postgresql_*</code> <code>aws_rds_*</code> <code>mongodbatlas</code></td>
+  </tr>
+  <tr>
+    <td class="role">Edge / delivery</td>
+    <td>CDN, DNS, WAF. Sits between the world and your network.<span class="tell">Open question: networking layer, or its own role?</span></td>
+    <td><code>akamai</code> <code>cloudflare</code></td>
+  </tr>
+</table>
+
+<!-- =============================================== -->
+<h2>Containment is a first-class relationship</h2>
+<p><code>parent</code> should be a real edge kind, queryable like <code>references</code> — not a rendering hint tucked in node data. The chain below is the address of a resource. Resolve the address first, then you only ever touch one branch.</p>
+
+<div class="chain">
+  <span class="n cloud">azurerm tenant</span><span class="arrow">▸</span>
+  <span class="n cloud">azurerm_subscription</span><span class="arrow">▸</span>
+  <span class="n cloud">azurerm_resource_group</span><span class="arrow">▸</span>
+  <span class="n net">azurerm_virtual_network</span><span class="arrow">▸</span>
+  <span class="n net">azurerm_subnet</span><span class="arrow">▸</span>
+  <span class="n cmp">azurerm_network_interface</span><span class="arrow">▸</span>
+  <span class="n cmp">azurerm_linux_virtual_machine</span>
+</div>
+<div class="chain">
+  <span class="n cloud">vsphere_datacenter</span><span class="arrow">▸</span>
+  <span class="n cloud">vsphere_compute_cluster</span><span class="arrow">▸</span>
+  <span class="n cloud">vsphere_host</span><span class="arrow">▸</span>
+  <span class="n cmp">vsphere_virtual_machine</span>
+</div>
+<p class="chain-note">The same path is the diagnostic context. Where a thing sits tells you what it depends on.</p>
+
+<!-- =============================================== -->
+<h2>How the agent would derive this — proposed rules</h2>
+<p>Ordered. First rule that fires wins. Everything inferred is tier 4 and says so, so a wrong guess is visible instead of baked in.</p>
+
+<div class="rules">
+  <div class="rule"><div class="k">1</div><div class="body">If <code>config/layers.yaml</code> names the type explicitly, use that.<small>Declared beats inferred. This is where you correct the algorithm.</small></div></div>
+  <div class="rule"><div class="k">2</div><div class="body">Containment from fan-in: if &gt;N% of a provider's types reference type X through an attribute named like <code>*_group_name</code>, <code>*_id</code>, <code>parent_*</code>, X is a container and the edge kind is <code>contained_by</code>, not <code>references</code>.<small>Resource group, subscription, datacenter, folder, VPC all fall out of this.</small></div></div>
+  <div class="rule"><div class="k">3</div><div class="body">Provider role from reference direction: a provider whose cross-provider edges are all outbound and which has no <code>contained_by</code> edges into substrate types is a support service.<small>Datadog, Grafana, Vault land here without a keyword rule.</small></div></div>
+  <div class="rule"><div class="k">4</div><div class="body">Layer from vocabulary in the docs: <em>network, subnet, vpc, route, nsg, port group</em> → networking; <em>disk, bucket, datastore, volume, blob</em> → storage; <em>vm, instance, cluster, node pool, scale set</em> → compute.<small>Same mechanism as <code>Get-CategoryRuleSet</code>, different axis. Move both to config.</small></div></div>
+  <div class="rule"><div class="k q">?</div><div class="body">Anything a support provider references that doesn't resolve to a substrate node becomes a placeholder node, tier 4, waiting to be joined.<small>Datadog doesn't declare the host, but the host exists.</small></div></div>
+</div>
+
+<!-- =============================================== -->
+<h2>What this changes in the repo</h2>
+<table>
+  <tr><th>File</th><th>Change</th></tr>
+  <tr><td><code>config/layers.yaml</code></td><td>New. Layer list (networking, storage, compute, identity), vocabulary per layer, explicit type overrides.</td></tr>
+  <tr><td><code>config/roles.yaml</code></td><td>New. Role list, per-provider overrides, the fan-in threshold for rule 2.</td></tr>
+  <tr><td><code>graph.json</code></td><td>Edges gain <code>contained_by</code> as a kind. Nodes gain <code>layer</code> and provider nodes gain <code>role</code>. Both carry a tier.</td></tr>
+  <tr><td><code>ontology.build.ps1</code></td><td>Facets block in the view model: every distinct provider, layer, role, edge kind, with counts. Panel builds filters from it.</td></tr>
+  <tr><td><code>CLAUDE.md</code></td><td>Points at the two config files as the contract. A change that doesn't fit a declared layer or role is out of bounds; the agent asks.</td></tr>
+</table>
+
+<h2>Things to argue about</h2>
+<p>Is identity a layer or a role? Are data services compute, or their own thing? Is edge/CDN networking? Where does <code>azuread</code> go — it's substrate for Azure but reads like security. Does the fan-in threshold need to be per-provider? None of these need answering before the config exists; they need answering before it's trusted.</p>
+
+</body>
+</html>
