@@ -1080,7 +1080,7 @@ function Invoke-RegistryApi {
         $attempt++
         try {
             Write-Verbose "GET $uri (attempt $attempt)"
-            return Invoke-RestMethod -Uri $uri -Method Get -Headers @{ 'User-Agent' = 'OntologyBuilder/0.1 (terraform.schema.build.ps1)' }
+            return Invoke-RestMethod -Uri $uri -Method Get -Headers @{ 'User-Agent' = 'Claude.Ontology/0.1 (terraform.schema.build.ps1)' }
         }
         catch {
             $status = $null

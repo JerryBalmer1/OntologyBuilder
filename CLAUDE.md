@@ -1,4 +1,4 @@
-# CLAUDE.md — OntologyBuilder (INTERIM, dev phase)
+# CLAUDE.md — Claude.Ontology (INTERIM, dev phase)
 
 This file is deliberately temporary. It exists to speed up the current
 build-out. Do not "improve" it, restructure it, or add sections. If you
