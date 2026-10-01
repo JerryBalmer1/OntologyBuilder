@@ -39,4 +39,4 @@ desktop.ini
 .env
 .env.*
 *.pem
-*.key
+*.key*.stackdump
